@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Primera unidad</title>
+<meta name="theme-color" content="#f6f3ec">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Archivo+Narrow:wght@500;700&display=swap">
+<style>/* Layout: una columna para celular; bandas de color suaves por tema, como un folleto plegable */
+:root{
+  --bg:#f6f3ec; --fg:#24221f; --muted:#5f5a52; --line:#d9d2c4; --card:#fffdf8;
+  --mostaza:#e7d38f; --salvia:#bfd8b8; --cielo:#b9d3e4; --rosa:#ebc0c6; --durazno:#efc9a4;
+  --tinta:#3b5a73; --ok:#3f7a52; --warn:#9a5b1f;
+  --f-display:"Archivo",system-ui,sans-serif; --f-body:"Archivo",system-ui,sans-serif; --f-label:"Archivo Narrow","Arial Narrow",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1c1b19; --fg:#ece7dd; --muted:#b3ab9d; --line:#3b3833; --card:#252321;
+  --mostaza:#5c5232; --salvia:#3d5240; --cielo:#34495a; --rosa:#5a3c42; --durazno:#5c4632;
+  --tinta:#a9c6dc; --ok:#8fc29f; --warn:#e2ad78; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1c1b19; --fg:#ece7dd; --muted:#b3ab9d; --line:#3b3833; --card:#252321;
+  --mostaza:#5c5232; --salvia:#3d5240; --cielo:#34495a; --rosa:#5a3c42; --durazno:#5c4632;
+  --tinta:#a9c6dc; --ok:#8fc29f; --warn:#e2ad78; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header h1{font-family:var(--f-display);font-weight:800;font-size:1.9rem;line-height:1.05;letter-spacing:-.02em;margin:.4rem 0 .3rem;text-wrap:balance}
+header p{margin:0;color:var(--muted)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:10px 0;margin:10px 0 4px;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;font-family:var(--f-label);font-weight:700;font-size:.85rem;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 12px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+nav button:focus-visible,summary:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+section{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.band{border-radius:14px;padding:14px 16px;min-width:0}
+.mostaza{background:var(--mostaza)}.salvia{background:var(--salvia)}.cielo{background:var(--cielo)}.rosa{background:var(--rosa)}.durazno{background:var(--durazno)}
+h2{font-family:var(--f-display);font-weight:800;font-size:1.25rem;line-height:1.15;margin:0 0 6px;text-wrap:balance}
+h3{font-family:var(--f-label);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--muted)}
+.band h3{color:inherit;opacity:.75}
+p{margin:0}
+ul{margin:4px 0 0;padding-left:1.1em}
+li{margin:2px 0}
+.def{font-size:1rem;border-left:3px solid currentColor;padding-left:10px;margin-top:6px}
+.src{font-family:var(--f-label);font-size:.8rem;color:var(--muted);margin-top:6px}
+.band .src{color:inherit;opacity:.7}
+.star{display:inline-block;font-family:var(--f-label);font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;background:var(--fg);color:var(--bg);border-radius:6px;padding:1px 7px;margin-left:4px;vertical-align:2px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.split{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.tag{font-family:var(--f-label);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase}
+.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0}
+summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:600;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--f-label);font-weight:700;color:var(--muted)}
+details[open] summary::after{content:"–"}
+details .in{padding:0 14px 12px;color:var(--fg)}
+.flow{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:8px 0}
+.step b.n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--fg);color:var(--bg);font-family:var(--f-label);font-weight:700}
+.arrow{margin-left:13px;width:2px;height:10px;background:var(--line)}
+.cmp{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:96px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:8px}
+.row:first-child{border-top:0;padding-top:0}
+.k{font-family:var(--f-label);font-weight:700}
+.num{font-variant-numeric:tabular-nums;font-weight:800}
+.quiz details summary{font-weight:600}
+.quiz .in{border-top:1px dashed var(--line);padding-top:10px}
+footer{color:var(--muted);font-size:.85rem;margin-top:18px}
+@media (prefers-reduced-motion:no-preference){section{animation:fade .18s ease-out}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+
+/* Agregados: barra de inicio, preguntas interactivas, avisos de discrepancia */
+.home{display:inline-block;font-family:var(--f-label);font-weight:700;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta);text-decoration:none;margin-top:4px}
+.ojo{border:1.5px dashed var(--warn);border-radius:12px;padding:10px 12px;background:var(--card)}
+.ojo b.t{color:var(--warn);font-family:var(--f-label);letter-spacing:.04em;text-transform:uppercase;font-size:.8rem;display:block;margin-bottom:2px}
+.pares{display:grid;gap:10px}
+.par{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.par h2{font-size:1.05rem;margin-bottom:8px}
+.par .split{margin-top:4px}
+.par .lado{border-left:3px solid var(--line);padding-left:9px;min-width:0}
+.par .lado .tag{display:block;margin-bottom:2px}
+.par .imp{margin-top:8px;font-size:.92rem;border-top:1px dashed var(--line);padding-top:7px}
+.qbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 2px}
+.qbar button,.qfoot button{font-family:var(--f-label);font-weight:700;font-size:.85rem;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--fg);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;cursor:pointer}
+.qbar button.pri,.qfoot button.pri{background:var(--fg);color:var(--bg)}
+.qbar select{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 10px}
+.score{font-family:var(--f-display);font-weight:800;font-size:1.2rem}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.q .qn{font-family:var(--f-label);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.q .qt{margin:4px 0 8px;font-weight:600}
+.q .qt i{font-weight:500}
+.q label{display:grid;grid-template-columns:22px 1fr;gap:6px;align-items:start;padding:6px 6px;border-radius:8px;cursor:pointer}
+.q label:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.q input{margin-top:4px;accent-color:var(--fg)}
+.q label.ok{background:color-mix(in srgb,var(--ok) 18%,transparent)}
+.q label.bad{background:color-mix(in srgb,var(--warn) 20%,transparent);text-decoration:line-through}
+.q .exp{display:none;margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;font-size:.93rem}
+.q.done .exp{display:block}
+.q .res{font-family:var(--f-label);font-weight:700;text-transform:uppercase;font-size:.78rem;letter-spacing:.05em}
+.q .res.ok{color:var(--ok)}.q .res.bad{color:var(--warn)}
+.q .vf{display:flex;gap:10px}
+.q .vf label{grid-template-columns:22px auto;border:1px solid var(--line);padding:6px 14px}
+.qfoot{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.menu{display:grid;gap:10px}
+.menu a{display:block;text-decoration:none;color:inherit;border-radius:14px;padding:14px 16px}
+.menu a b{font-family:var(--f-display);font-weight:800;font-size:1.15rem;display:block}
+.menu a span{color:inherit;opacity:.8;font-size:.92rem}
+.hora{font-family:var(--f-label);font-weight:700;font-variant-numeric:tabular-nums}
+.check{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;padding:6px 0;border-top:1px solid var(--line)}
+.check:first-of-type{border-top:0}
+.check input{margin-top:4px;accent-color:var(--fg);width:18px;height:18px}
+</style>
+</head><body data-key="u1">
+<div class="wrap">
+<header>
+  <a class="home" href="./">← Inicio</a>
+  <h3>Derecho Administrativo II · torpedo</h3>
+  <h1>Acto y procedimiento administrativo</h1>
+  <p>Primera unidad, según el apunte del curso y la Ley 19.880. Lo marcado con <span class="star">prueba</span> ya lo preguntaron en la 2.ª evaluación.</p>
+</header>
+
+<nav role="tablist" aria-label="Temas">
+  <button role="tab" aria-selected="true" data-s="conc">Concepto</button>
+  <button role="tab" aria-selected="false" data-s="prer">Prerrogativas</button>
+  <button role="tab" aria-selected="false" data-s="elem">Elementos</button>
+  <button role="tab" aria-selected="false" data-s="est">Perfección y eficacia</button>
+  <button role="tab" aria-selected="false" data-s="irr">Vicios</button>
+  <button role="tab" aria-selected="false" data-s="imp">Impugnación</button>
+  <button role="tab" aria-selected="false" data-s="proc">Procedimiento</button>
+  <button role="tab" aria-selected="false" data-s="preg">Preguntas</button>
+</nav>
+
+<!-- CONCEPTO -->
+<section id="conc" role="tabpanel">
+  <div class="band mostaza">
+    <h3>Actividad jurídico-formal</h3>
+    <p>Declaraciones de la Administración que <b>innovan</b> en el ordenamiento, sujetas a procedimiento y forma. <b>No</b> incluye los <b>actos materiales</b>: el decreto que ordena demoler se invalida o revoca; el derribo físico no. Demoler sin decreto es <b>vía de hecho</b>.</p>
+    <p style="margin-top:6px"><b>Autotutela:</b> prohibida al particular; la Administración la tiene, pero su acto siempre es impugnable y solo puede dictarlo si el ordenamiento la faculta.</p>
+  </div>
+  <div class="box">
+    <h2>Clasificación de la actividad jurídica</h2>
+    <ul>
+      <li><b>Unilateral = acto administrativo:</b> general (reglamento) o singular (patente a Juan Herrera).</li>
+      <li><b>Bilateral</b> (no es categoría propia del Derecho administrativo):
+        <ul><li>Por el sujeto: <b>contrato público</b> (con un privado: construir una plaza) / <b>convenio administrativo</b> (entre entes públicos: municipio + Servicio de Salud para un CESFAM).</li>
+        <li>Por el régimen: <b>contratos administrativos</b> (obra pública, concesión) / <b>de Derecho común</b> (arriendo, mutuo).</li></ul></li>
+      <li>Es la <b>ley</b>, no la entidad, la que define el régimen: BancoEstado contrata bajo régimen privado.</li>
+    </ul>
+  </div>
+  <div class="par">
+    <h2>Las definiciones <span class="star">prueba</span></h2>
+    <div class="cmp">
+      <div class="row"><span class="k">Zanobini</span><span>«Cualquier declaración de <b>voluntad, de deseo, conocimiento o juicio</b>, hecha por un sujeto de la Administración Pública en el ejercicio de una potestad administrativa». Es la base del art. 3 LBPA.</span></div>
+      <div class="row"><span class="k">D.S. 26 (2001)</span><span>Primer concepto positivo (reglamento sobre secreto y reserva): «decisiones formales… declaraciones <b>finales</b> de voluntad». <b>Crítica:</b> confunde género y especie; son declaraciones que pueden contener decisiones, no al revés.</span></div>
+      <div class="row"><span class="k">Silva Cimma</span><span>Declaración de voluntad <b>general o individual</b> (la usaba la Contraloría). <b>Crítica:</b> confunde la psiquis con el acto; parecida a la definición de ley del CC. Mérito: incluye a los reglamentos.</span></div>
+      <div class="row"><span class="k">España</span><span>Criterio de <b>contenido</b> (el acto aplica normas; el reglamento es norma) y <b>ordinamentalista</b> (el reglamento está sobre el acto). Así se evita la <b>derogación singular</b>: el alcalde no puede eximir a una empresa del reglamento de estacionamientos.</span></div>
+      <div class="row"><span class="k">Art. 3 LBPA</span><span>Repite el error del D.S. 26, sin «finales». Inc. 5: agrega juicio, constancia y conocimiento (aporte de Zanobini). Separa el acto del documento (decreto o resolución). Los reglamentos entran por el <b>art. 48</b> (letra española, espíritu francés).</span></div>
+    </div>
+  </div>
+  <div class="box">
+    <h2>Las cuatro declaraciones <span class="star">prueba</span></h2>
+    <ul>
+      <li><b>Voluntad:</b> decide. «Ordénese la demolición…», sanción, beca.</li>
+      <li><b>Deseo:</b> no hay decisión final; es una oferta. Llamado a concurso, compra pública.</li>
+      <li><b>Conocimiento o constancia:</b> certifica. Certificado de defunción, constancia de notificación.</li>
+      <li><b>Juicio:</b> opina para que otro decida. Informe en derecho en un sumario («se sugiere…»), dictamen de la CGR.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PRERROGATIVAS -->
+<section id="prer" role="tabpanel" hidden>
+  <div class="band rosa"><p>Base común: la <b>autotutela</b>. Art. 3 inciso final LBPA: los actos gozan de <b>presunción de legalidad, imperio y exigibilidad</b> desde su entrada en vigencia. El principio de legalidad es a la vez su límite y su condición.</p></div>
+  <div class="par">
+    <h2>1 · Presunción de validez</h2>
+    <p>Deber de actuar como si el acto fuera válido mientras no se declare su nulidad. Es <b>iuris tantum</b>: admite prueba en contrario y suspensión judicial. No es inimpugnabilidad. Apoyo: art. 12 (el funcionario inhábil no invalida necesariamente el acto). En Chile rige desde la <b>entrada en vigencia</b>; en España, desde la dictación.</p>
+  </div>
+  <div class="par">
+    <h2>2 · Ejecutividad <span class="star">prueba</span></h2>
+    <p><b>Obligatoriedad o exigibilidad inmediata</b> del acto una vez comunicado. Es lo que el art. 3 llama «<b>imperio</b> y exigibilidad». Los recursos no la suspenden, salvo orden expresa. Excepción: actos que necesitan aceptación (ciertos nombramientos).</p>
+  </div>
+  <div class="par">
+    <h2>3 · Ejecutoriedad</h2>
+    <p>La Administración <b>ejecuta por sí misma</b>, sin ir al juez y aun contra la voluntad del administrado (la clausura del local). No se ejecutan forzosamente los actos de <b>juicio, certificatorios y registrales</b>: no hay nada que ejecutar. Crítica: la LBPA la da pero no regula cómo se ejecuta.</p>
+  </div>
+  <div class="ojo"><b class="t">Ojo con la terminología</b>Algunos autores usan ejecutividad y ejecutoriedad como sinónimos. Para la cátedra, la segunda prerrogativa se llama <b>ejecutividad</b>. El art. 51 LBPA, en cambio, titula «Ejecutoriedad» a la regla de que los actos rigen desde su notificación o publicación.</div>
+  <p class="src">Para profundizar la presunción de validez, ver el resumen de Delgado.</p>
+</section>
+
+<!-- ELEMENTOS -->
+<section id="elem" role="tabpanel" hidden>
+  <div class="band cielo"><p><b>Validez</b> = adecuación al ordenamiento en su conjunto (Rebollo): juridicidad, no solo legalidad. El acto nace válido o viciado; si es inválido, igual produce efectos mientras no se declare. Fuente de los elementos: <b>art. 7 CPR</b> (investidura, competencia, forma), art. 1 CPR (bien común), arts. 2 y 3 Ley 18.575, art. 41 LBPA (decisión fundada).</p></div>
+  <div class="par">
+    <h2>Subjetivos (quién)</h2>
+    <p><b>a) Investidura regular.</b></p>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Funcionario de hecho</span>Investidura irregular con título aparente (dibujante técnico como Director de Obras). Sus actos <b>se conservan</b>: <i>favor acti</i>, art. 63 Ley 18.575 (efecto ex nunc).</div>
+      <div class="lado"><span class="tag warn">Usurpador</span>Sin investidura alguna (un funcionario municipal que dice ser carabinero). Vicio <b>siempre invalidante</b>.</div>
+    </div>
+    <p style="margin-top:8px"><b>b) Competencia</b> <span class="star">prueba</span>: por <b>materia, jerarquía (grado), territorio y tiempo</b>. Un alcalde que decreta para otra comuna: nulo por territorio.</p>
+    <div class="split" style="margin-top:6px">
+      <div class="lado"><span class="tag warn">Desconcentración</span>La <b>ley</b> transfiere la <b>titularidad</b>. Se rompe la jerarquía: no hay recurso jerárquico ante el superior.</div>
+      <div class="lado"><span class="tag ok">Delegación</span>Un <b>acto</b> transfiere el <b>ejercicio</b>. Se mantiene la jerarquía. Art. 41 Ley 18.575: parcial, a dependientes, publicada o notificada, responsable el delegado, revocable; el delegante debe <b>revocar antes</b> de actuar. La delegación de firma no transfiere la decisión.</div>
+    </div>
+    <p style="margin-top:6px"><b>Abstención (art. 12 LBPA):</b> interés personal; parentesco (4.° consanguinidad, 2.° afinidad); amistad íntima o enemistad manifiesta; haber sido perito o testigo; relación de servicio o servicios profesionales en los 2 últimos años.</p>
+  </div>
+  <div class="par">
+    <h2>Objetivos (el acto)</h2>
+    <ul>
+      <li><b>Presupuesto de hecho:</b> el supuesto que la norma exige (para decretar catástrofe, debe haberla). Reglado y controlable por el juez.</li>
+      <li><b>Contenido:</b> lo que el acto dispone: el «resuelvo» (multa de 50 UTM).</li>
+      <li><b>Fin:</b> el resultado objetivo de interés público fijado por la ley. Si se persigue otro: <b>desviación de poder</b>, que se <b>invalida</b>, no se revoca.</li>
+      <li><b>Causa:</b> congruencia del contenido con el fin; exige motivos de <b>hecho y de derecho</b>. Falsedad de motivos: el estacionamiento para personas con discapacidad entregado a un concejal que paga.</li>
+    </ul>
+  </div>
+  <div class="par">
+    <h2>Formales (cómo) <span class="star">prueba</span></h2>
+    <ul>
+      <li><b>Procedimiento</b> (art. 18).</li>
+      <li><b>Forma de expresión:</b> por escrito, salvo que la naturaleza exija otra (señales de tránsito). El acto no es el documento: si se pierde el decreto, el acto subsiste.</li>
+      <li><b>Motivación:</b> <b>exposición y explicación de las razones de hecho y de derecho</b>. No es el motivo (fondo) sino su expresión formal. Arts. 11 inc. 2 y 41 LBPA. «Lo no motivado es ya, por este solo hecho, arbitrario» (CA Punta Arenas 316-2025, conf. CS).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ESTADOS -->
+<section id="est" role="tabpanel" hidden>
+  <div class="flow box">
+    <div class="step"><b class="n">1</b><div><b>Perfección</b>: concurren los elementos esenciales; se produce al <b>dictarse</b>. No es etapa, es fenómeno. Perfecto pero no vigente → puede <b>retirarse</b> sin formalidad (durante la toma de razón).</div></div>
+    <div class="arrow"></div>
+    <div class="step"><b class="n">2</b><div><b>Vigencia</b>: sale de la esfera interna con la <b>comunicación</b> (notificación o publicación). Desde ahí operan las prerrogativas. Ya vigente, solo se elimina por invalidación (art. 53).</div></div>
+    <div class="arrow"></div>
+    <div class="step"><b class="n">3</b><div><b>Eficacia</b>: aptitud para producir efectos; por regla general desde la notificación o publicación (art. 51). La publicidad es requisito <i>sine qua non</i>.</div></div>
+  </div>
+  <div class="par">
+    <h2>Eficacia externa · interna <span class="star">prueba</span></h2>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Externa (formal)</span>¿Se sabe del acto? Depende de la comunicación (arts. 45, 48, 51).</div>
+      <div class="lado"><span class="tag warn">Interna (material)</span>¿Ya hay que cumplirlo? Depende del contenido.</div>
+    </div>
+    <div class="imp">Normalmente coinciden. Se separan <b>hacia el futuro</b> (eficacia diferida: «la beca se pagará desde el 2 de enero») o <b>hacia el pasado</b> (retroactividad favorable, art. 52).</div>
+  </div>
+  <div class="box"><p><b>Validez y eficacia son planos independientes.</b> Válido e ineficaz: acto no notificado. Inválido y eficaz: acto viciado que rige mientras no se anule. El permiso ilegal ya notificado obliga a la Municipalidad a invalidarlo con audiencia previa; no puede desconocerlo.</p></div>
+</section>
+
+<!-- IRREGULARIDADES -->
+<section id="irr" role="tabpanel" hidden>
+  <div class="band rosa"><p><b>Ilegalidad ≠ invalidez</b> (Huepe): no toda ilegalidad anula, pero toda nulidad viene de una ilegalidad. Principios de <b>trascendencia</b> (no hay nulidad sin perjuicio) y <b>conservación</b> (la nulidad es excepcional).</p></div>
+  <div class="par">
+    <h2>Los tres grados del art. 13</h2>
+    <ul>
+      <li><b>Invalidantes:</b> fondo, o forma que recae en requisito esencial <b>y</b> causa perjuicio. Ej.: falta de motivación en un acto sancionatorio; omitir la audiencia previa del art. 53.</li>
+      <li><b>Subsanables:</b> esenciales sin perjuicio ni afectar terceros (art. 13 inc. final y art. 56). Ej.: el superior ratifica lo que firmó un subordinado incompetente.</li>
+      <li><b>No invalidantes:</b> todo lo demás. Ej.: infracción al deber de abstención; errores de copia o cálculo (se rectifican por el art. 62).</li>
+    </ul>
+  </div>
+  <div class="par">
+    <h2>Invalidación · revocación</h2>
+    <div class="split">
+      <div class="lado"><span class="tag warn">Invalidación (art. 53)</span>Por <b>ilegalidad</b>. De oficio o a petición de parte. <b>Audiencia previa.</b> Total o parcial. El acto invalidatorio se impugna ante tribunales en procedimiento breve y sumario.</div>
+      <div class="lado"><span class="tag ok">Revocación (art. 61)</span>Por <b>mérito, oportunidad o conveniencia</b> de un acto válido. Por el órgano que lo dictó. No procede: derechos adquiridos legítimamente, otra forma de extinción legal, o regulación que lo impida. Ej.: revisar una RCA cuyas variables ambientales cambiaron.</div>
+    </div>
+    <div class="imp">Pregunta decisiva: ¿el acto <b>nació mal</b> (invalidación) o <b>dejó de convenir</b> (revocación)? El juez no revoca por mérito.</div>
+  </div>
+  <div class="ojo"><b class="t">Ojo con el plazo de invalidación</b>El apunte dice <b>2 años</b> desde la notificación o publicación. El art. 53 vigente dice <b>1 año</b>. Si la pregunta dice «según la LBPA», responde 1 año.</div>
+  <div class="par">
+    <h2>¿Retroactiva?</h2>
+    <p>Pierry: <b>ex nunc</b>. Soto Kloss: <b>ex tunc</b>. Regla para retener: en principio <b>ex tunc</b>, pero cede ante los <b>derechos adquiridos de buena fe</b> y la seguridad jurídica (conservación; CGR 54.179/2004; CS 3078-2013). Ex nunc por ley expresa: art. 63 Ley 18.575 y art. 12 LBPA.</p>
+    <p style="margin-top:6px"><b>Invalidación ≠ Nulidad de Derecho Público:</b> la primera es potestad administrativa (LBPA, con plazo de caducidad); la segunda es una acción judicial (arts. 6 y 7 CPR), imprescriptible en lo anulatorio.</p>
+  </div>
+</section>
+
+<!-- IMPUGNACION -->
+<section id="imp" role="tabpanel" hidden>
+  <div class="split">
+    <div class="box"><span class="tag warn">Acción de nulidad</span><p>Pide anular el acto. Cualquiera con interés; efectos <b>erga omnes</b>; requiere ley; no prescribe. Ej.: reclamo de ilegalidad municipal.</p></div>
+    <div class="box"><span class="tag ok">Plena jurisdicción</span><p>Pide restablecer o compensar un derecho. Solo el titular; efectos relativos; prescribe según el CC. Ej.: responsabilidad extracontractual del Fisco.</p></div>
+  </div>
+  <div class="box">
+    <h2>Recursos administrativos</h2>
+    <div class="cmp">
+      <div class="row"><span class="k">Reposición</span><span>Ante el <b>mismo órgano</b>, <b>5 días</b> (art. 59).</span></div>
+      <div class="row"><span class="k">Jerárquico</span><span>Ante el <b>superior</b>, <b>5 días</b>, solo o en subsidio de la reposición. No procede contra actos del Presidente, ministros, alcaldes ni jefes superiores de servicios descentralizados: ahí la reposición agota la vía.</span></div>
+      <div class="row"><span class="k">Alzada impropia</span><span>Ante un órgano que no es el superior (el ministerio respecto de un servicio descentralizado).</span></div>
+      <div class="row"><span class="k">Revisión</span><span>Contra actos <b>firmes</b>, causales tasadas, <b>1 año</b> (art. 60).</span></div>
+    </div>
+    <p style="margin-top:6px">Se resuelven en un plazo no superior a 30 días; quien acoge puede <b>modificar, reemplazar o dejar sin efecto</b> el acto (art. 59). Si se pidió algo, no se puede <b>agravar</b> la situación del interesado (art. 41).</p>
+  </div>
+  <div class="box">
+    <h2>Vía judicial</h2>
+    <ul>
+      <li><b>Nulidad de Derecho Público:</b> innominada (arts. 6, 7 y 38 CPR), ante el juez civil en juicio ordinario, a falta de acción especial.</li>
+      <li><b>Protección:</b> Corte de Apelaciones, 30 días corridos; «sustituto incompleto» de la justicia administrativa.</li>
+      <li><b>Acciones especiales:</b> de derecho estricto (unas 200). Orden: primero la especial; a falta de ella, la general.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Relación entre las vías (art. 54)</h2>
+    <p>Puedes elegir. Pero si reclamas ante la Administración, no puedes llevar la misma pretensión a tribunales hasta que se resuelva o se entienda desestimada; el plazo judicial se <b>interrumpe</b>. Si accionas en tribunales, la Administración se inhibe. Modelos sectoriales: acción directa, recurso previo potestativo, <b>agotamiento obligatorio</b> (Tribunales Ambientales). <i>Solve et repete</i>: consignar parte de la multa para reclamar (criticado).</p>
+  </div>
+</section>
+
+<!-- PROCEDIMIENTO -->
+<section id="proc" role="tabpanel" hidden>
+  <div class="band mostaza"><p><b>Art. 18:</b> sucesión de actos trámite vinculados, de la Administración y de particulares, para producir un <b>acto terminal</b>. Los actos de trámite solo se impugnan si impiden continuar o causan indefensión (art. 15).</p></div>
+  <div class="par">
+    <h2>Supletoriedad (art. 1) <span class="star">prueba</span></h2>
+    <ul>
+      <li><b>Primer grado:</b> no hay procedimiento especial → LBPA al 100 % (importar iguanas).</li>
+      <li><b>Segundo grado:</b> hay procedimiento especial con <b>vacíos o lagunas</b> → la LBPA los llena si es conciliable.</li>
+      <li><b>Criterio excepcional:</b> aun con procedimiento completo, se prefiere la LBPA si es más favorable al ciudadano (CGR 32.424/2004).</li>
+      <li><b>Exclusión formal:</b> basta que exista procedimiento especial (licencia de conducir). <b>Exclusión material:</b> la LBPA desnaturalizaría el especial (plazos del sumario).</li>
+      <li>Si el procedimiento especial está en un <b>reglamento</b>, la LBPA se aplica directamente (jerarquía).</li>
+    </ul>
+    <p class="src">Crítica: «ley de bases» y a la vez supletoria es contradictorio.</p>
+  </div>
+  <div class="par">
+    <h2>A quién se aplica (art. 2) <span class="star">prueba</span></h2>
+    <p>Ministerios, intendencias, gobernaciones, servicios públicos, <b>Contraloría</b>, FF.AA. y de Orden, gobiernos regionales y municipalidades. <b>No</b> se aplica al <b>Banco Central</b> ni a las <b>empresas públicas creadas por ley</b>, que sí están en la Ley 18.575. La <b>toma de razón</b> nunca se rige por la LBPA (CPR y LOC de la CGR).</p>
+  </div>
+  <div class="par">
+    <h2>Fases <span class="star">prueba</span></h2>
+    <p><b>Iniciación</b> (de oficio o a solicitud) → <b>instrucción</b> → <b>finalización</b> (acto terminal) → <b>control</b> (eventual: toma de razón) → <b>comunicación o publicidad</b> (notificación o publicación) → <b>impugnación</b> (discutido si es fase). En la 2.ª evaluación, la secuencia correcta fue: iniciación, instrucción, finalización, control y publicidad.</p>
+  </div>
+  <div class="par">
+    <h2>Finalización (art. 40)</h2>
+    <p>Terminan el procedimiento: la resolución final, el <b>desistimiento</b>, el <b>abandono</b>, la <b>renuncia</b> y la <b>imposibilidad material sobreviniente</b> (antes «decaimiento del procedimiento»). Las cuatro últimas no resuelven el fondo: el apunte las califica como <b>actos de trámite</b>. Siempre fundadas.</p>
+    <ul>
+      <li><b>Desistimiento:</b> deja el procedimiento, conserva el derecho. <b>Renuncia:</b> pierde el derecho.</li>
+      <li><b>Abandono (art. 43):</b> paralización por más de <b>30 días</b> por inactividad del interesado; advertencia de <b>7 días</b>.</li>
+    </ul>
+  </div>
+  <div class="par">
+    <h2>Control: toma de razón</h2>
+    <p>Control preventivo de constitucionalidad y legalidad por la CGR de decretos supremos y resoluciones de jefes de servicio. El Contralor puede eximir materias no esenciales (resoluciones <b>exentas</b>); los decretos reglamentarios siempre van. Resultado: toma razón, o <b>representa</b> (el Presidente puede insistir con la firma de todos los ministros, art. 99 CPR), o la Administración <b>retira</b> el acto para corregirlo.</p>
+  </div>
+  <div class="par">
+    <h2>Comunicación</h2>
+    <ul>
+      <li><b>Notificación</b> de actos individuales, con texto íntegro, a más tardar <b>5 días</b> después de la total tramitación (art. 45).</li>
+      <li><b>Electrónica</b> es la regla (art. 46): se entiende practicada al <b>tercer día hábil</b> desde el envío. A petición, carta certificada: tercer día desde su recepción en correos.</li>
+      <li><b>Tácita</b> (art. 47): gestión que supone conocimiento, sin reclamar antes de la falta de notificación.</li>
+      <li><b>Publicación</b> en el Diario Oficial (art. 48): normas generales o de interés general, número indeterminado de personas, paradero ignorado (días 1 o 15), las que ordene el Presidente y las que la ley mande.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PREGUNTAS -->
+<section id="preg" role="tabpanel" hidden>
+  <div class="band cielo"><p>Preguntas <b>nuevas</b> al estilo del profesor. Responde todas y toca <b>Corregir</b> al final.</p></div>
+  <div class="qbar">
+    <select id="qfiltro" aria-label="Filtrar"><option value="todo">Todas</option><option value="sm">Solo alternativas</option><option value="vf">Solo V/F</option></select>
+    <button data-q="mezclar">Mezclar</button>
+    <span class="score"></span>
+  </div>
+  <div id="quizbox" style="display:flex;flex-direction:column;gap:10px"></div>
+  <div class="qfoot"><button class="pri" data-q="corregir">Corregir</button><button data-q="reiniciar">Borrar respuestas</button><span class="score"></span></div>
+</section>
+
+<footer>Fuente: apunte del curso «Derecho Administrativo II. El acto administrativo y el procedimiento administrativo». Artículos de las Leyes 19.880 y 18.575 verificados contra LeyChile.</footer>
+</div>
+<script>
+window.PREG=[
+{t:'sm',q:'En relación a la siguiente actuación, determine a qué clase de actividad corresponde: <i>«La cuadrilla municipal derriba físicamente el muro cuya demolición ordenó el decreto alcaldicio N° 512»</i>.',
+ o:['Actividad jurídico-formal.','Acto material.','Declaración de juicio.','Declaración de constancia.'],a:1,
+ e:'El derribo es un acto material: existe en el mundo físico, no en el jurídico, y por eso no se invalida ni se revoca. El decreto sí es actividad jurídico-formal. Si se demuele sin decreto previo, hay vía de hecho.',s:'Apunte, I.1'},
+{t:'sm',q:'En relación a la siguiente narración, determine a qué figura corresponde: <i>«La Municipalidad de Valparaíso y el Servicio de Salud Valparaíso–San Antonio acuerdan operar en conjunto un CESFAM»</i>.',
+ o:['Contrato público.','Convenio administrativo.','Contrato de Derecho común.','Acto administrativo de efectos generales.'],a:1,
+ e:'Es un acto bilateral entre entidades públicas: convenio administrativo. El contrato público se celebra con una persona o entidad privada.',s:'Apunte, I.2'},
+{t:'sm',q:'Según lo explicado en clases, ¿cuál es la crítica que se formula a la definición de acto administrativo del D.S. N° 26 de 2001, que la Ley N° 19.880 reproduce?',
+ o:['Que excluye a los actos de juicio, constancia y conocimiento de cualquier forma.','Que confunde el género con la especie: trata las decisiones como género y las declaraciones como especie, cuando es a la inversa.','Que exige toma de razón para todos los actos administrativos.','Que incluye expresamente a los contratos públicos.'],a:1,
+ e:'Son declaraciones, y estas pueden contener decisiones. La LBPA repite el error, solo que suprime la palabra «finales».',s:'Apunte, II.2 y II.5'},
+{t:'sm',q:'Según lo explicado en clases, ¿qué crítica se formula a la definición de acto administrativo de Silva Cimma?',
+ o:['Que excluye a los reglamentos.','Que confunde la psiquis de la persona con el acto administrativo, pues los órganos no «deciden» en sentido psicológico.','Que fue elaborada por la Contraloría.','Que solo considera las declaraciones de deseo.'],a:1,
+ e:'Además, es muy cercana a la definición de «ley» del Código Civil. Su mérito es que, al hablar de declaración general o individual, permite incluir a los reglamentos.',s:'Apunte, II.3'},
+{t:'sm',q:'En relación a la siguiente narración, valore la actuación de acuerdo con el criterio ordinamentalista: <i>«Un reglamento municipal exige 20 estacionamientos por cada 1.000 m² construidos. El alcalde dicta una resolución que autoriza a una empresa determinada a construir con solo 5»</i>.',
+ o:['Es válida, porque el acto administrativo y el reglamento tienen la misma jerarquía.','Es improcedente: el acto está bajo el reglamento y no puede derogarlo para un caso particular; solo cabe modificar el reglamento con efecto general.','Es válida si la empresa paga una compensación.','Es improcedente solo si la Contraloría no toma razón.'],a:1,
+ e:'Es el ejemplo de la derogación singular, que es justamente lo que el criterio ordinamentalista prohíbe al situar acto y reglamento en grados distintos.',s:'Apunte, II.4'},
+{t:'sm',q:'Según lo explicado en clases, ¿por qué deben entenderse incluidos los reglamentos en el concepto de acto administrativo de la Ley N° 19.880?',
+ o:['Porque el art. 3° los menciona expresamente.','Por extensión del art. 48, que obliga a publicar en el Diario Oficial los actos que contengan normas de general aplicación.','Porque la Contraloría así lo dispuso en el D.S. N° 26.','Porque la doctrina española los incluye.'],a:1,
+ e:'Es la letra española entendida «al modo francés». La doctrina española, al contrario, excluye al reglamento del concepto de acto.',s:'Apunte, II.5'},
+{t:'sm',q:'En relación al siguiente antecedente, determine qué tipo de declaración corresponde: <i>«Llámase a concurso público de antecedentes para proveer el cargo de Jefe del Departamento de Tránsito»</i>.',
+ o:['Voluntad.','Deseo.','Conocimiento.','Juicio.'],a:1,
+ e:'No hay decisión final: es una oferta. El llamado a concurso y la compra pública son los ejemplos de declaración de deseo.',s:'Apunte, II.1'},
+{t:'sm',q:'En relación al siguiente antecedente, determine qué tipo de declaración corresponde: <i>«El oficial del Servicio de Registro Civil certifica que don Pedro Soto falleció el 3 de marzo de 2026»</i>.',
+ o:['Voluntad.','Deseo.','Conocimiento o constancia.','Juicio.'],a:2,
+ e:'No decide: certifica un hecho. Por eso tampoco es susceptible de ejecución forzosa: no hay nada que ejecutar.',s:'Apunte, II.1 y III'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué prerrogativa se encuentra en juego: <i>«Multado por una Superintendencia, el sancionado interpone reposición y sostiene que, mientras no se resuelva, no está obligado a pagar»</i>.',
+ o:['La ejecutividad: la interposición de recursos no suspende por sí sola la exigibilidad del acto, salvo orden expresa de suspensión.','La revocación: el acto queda sin efecto al recurrirse.','La caducidad: el plazo para pagar se extingue.','La perfección: el acto aún no existe.'],a:0,
+ e:'Desde la comunicación la multa es exigible. Recurrir no la suspende, salvo que se ordene expresamente la suspensión.',s:'Apunte, III'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué prerrogativa corresponde: <i>«La Administración materializa por sí misma la clausura del local, sin solicitar autorización judicial previa»</i>.',
+ o:['Presunción de validez.','Ejecutividad.','Ejecutoriedad.','Perfección.'],a:2,
+ e:'La ejecutoriedad es la prerrogativa de ejecutar por sí misma el acto, sin recurrir a tribunales y aun contra la voluntad del administrado.',s:'Apunte, III'},
+{t:'sm',q:'Según lo explicado en clases, ¿qué argumento entrega el art. 12 de la Ley N° 19.880 a favor de la presunción de validez?',
+ o:['Que todo acto dictado por un funcionario inhábil es nulo de pleno derecho.','Que la intervención de un funcionario afectado por una causal de abstención no implica necesariamente la invalidez del acto.','Que los actos no pueden impugnarse mientras estén vigentes.','Que la presunción de validez es de derecho.'],a:1,
+ e:'La infracción al deber de abstención genera responsabilidad del funcionario, pero el acto conserva su validez. La presunción, en todo caso, es iuris tantum.',s:'Apunte, III'},
+{t:'sm',q:'En relación a la siguiente narración, determine el efecto sobre los actos dictados: <i>«Un dibujante técnico es nombrado Director de Obras Municipales, cargo que exige el título de arquitecto, y otorga permisos de edificación antes de ser destituido»</i>.',
+ o:['Los permisos son nulos, porque se trata de un usurpador.','Los permisos se conservan, porque se trata de un funcionario de hecho y prima la seguridad jurídica de los terceros de buena fe.','Los permisos quedan suspendidos hasta la toma de razón.','Los permisos deben revocarse por mérito.'],a:1,
+ e:'Investidura existente pero irregular, con título aparente: funcionario de hecho. Rige el favor acti del art. 63 de la Ley 18.575, uno de los pocos casos con efecto ex nunc expreso.',s:'Apunte, IV.3.A'},
+{t:'sm',q:'En relación a la siguiente narración, valore la procedencia del recurso: <i>«La ley entrega una facultad exclusivamente al Director de Obras, excluyendo al alcalde. Un vecino recurre jerárquicamente ante el alcalde contra lo resuelto por el Director»</i>.',
+ o:['Procede, porque el alcalde es el superior jerárquico del Director.','No procede, porque la desconcentración traslada la titularidad de la competencia y rompe la jerarquía.','Procede solo si hubo delegación de firma.','No procede, porque los actos municipales no son impugnables.'],a:1,
+ e:'En la desconcentración la ley transfiere la titularidad; el superior deja de tenerla y no puede revisar por vía jerárquica. En la delegación, en cambio, la jerarquía se mantiene.',s:'Apunte, IV.3.A y VII.2'},
+{t:'sm',q:'En relación a la siguiente narración, valore la actuación: <i>«El alcalde delegó en el administrador municipal el otorgamiento de ciertos permisos y, sin revocar la delegación, otorga él mismo uno de ellos»</i>.',
+ o:['Es válida, porque el delegante sigue siendo titular de la competencia.','Es ilegal, porque el delegante no puede ejercer la competencia delegada sin revocar previamente la delegación.','Es válida, porque la delegación es irrevocable.','Es ilegal, porque la delegación solo puede hacerse en favor de otro alcalde.'],a:1,
+ e:'Art. 41 inciso 2° de la Ley 18.575. La delegación es esencialmente revocable, pero debe revocarse antes de actuar.',s:'Apunte, IV.3.A; art. 41 Ley 18.575'},
+{t:'sm',q:'Determine a qué elemento del acto administrativo corresponde la siguiente descripción: <i>«Para dictar el acto que jubila a un funcionario por edad reglamentaria, este debe haberla alcanzado»</i>.',
+ o:['Presupuesto de hecho.','Contenido.','Fin.','Motivación.'],a:0,
+ e:'El presupuesto de hecho del acto coincide con el supuesto previsto por la norma que atribuye la potestad. Es reglado y controlable por el juez.',s:'Apunte, IV.3.B'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué elemento del acto resulta afectado: <i>«La alcaldesa concede a un concejal sin discapacidad, previo pago de una tarifa, el uso exclusivo de un estacionamiento reservado para personas con discapacidad»</i>.',
+ o:['La forma de expresión.','La causa, por falsedad de los motivos de hecho.','La investidura regular.','La competencia territorial.'],a:1,
+ e:'La causa exige un motivo de hecho (personas con discapacidad que necesitan el espacio) y uno de derecho (la ordenanza). Aquí desaparece por completo el motivo de hecho.',s:'Apunte, IV.3.B'},
+{t:'sm',q:'Si una autoridad ejerce su potestad apartándose del interés público para perseguir un fin ajeno, ¿qué vicio se configura y cuál es la vía para eliminar el acto?',
+ o:['Exceso de poder; revocación por mérito.','Desviación de poder; invalidación, porque el acto es ilegal.','Vicio no invalidante; rectificación por el art. 62.','Abuso de poder; caducidad.'],a:1,
+ e:'La desviación de poder es una infracción al ordenamiento: el acto es ilegal y debe invalidarse (art. 53). La revocación procede respecto de actos válidos que perdieron su mérito.',s:'Apunte, IV.3.B'},
+{t:'sm',q:'En relación al siguiente acto, determine qué elemento falta: <i>«Vistos: el art. 15 de la Ley X. Resuelvo: aplíquese una multa de 50 UTM»</i>.',
+ o:['El contenido.','La motivación.','La forma escrita.','La competencia.'],a:1,
+ e:'Transcribe la norma pero no expresa ningún hecho que justifique la decisión. «Lo no motivado es ya, por este solo hecho, arbitrario» (CA Punta Arenas, rol 316-2025, confirmada por la CS).',s:'Apunte, IV.3.C'},
+{t:'sm',q:'En relación a la siguiente narración, valore la actuación del servicio: <i>«Durante la toma de razón, la Contraloría advierte que falta acreditar un requisito de ingreso. El servicio retira el decreto de nombramiento, acompaña el certificado y lo reingresa»</i>.',
+ o:['Es ilegal, porque debió seguir el procedimiento de invalidación del art. 53.','Es válida, porque el acto es perfecto pero aún no vigente: no ha sido comunicado ni goza de presunción de validez.','Es ilegal, porque la Contraloría debió representarlo.','Es válida solo con decreto de insistencia.'],a:1,
+ e:'Un acto perfecto pero no vigente puede retirarse sin formalidad. Una vez vigente, solo cabe la invalidación con audiencia previa.',s:'Apunte, V.1 y VIII.4.2'},
+{t:'sm',q:'En relación a la siguiente narración, determine el fenómeno que se ha producido: <i>«El 10 de noviembre se notifica una resolución que dispone que el permiso de funcionamiento regirá desde el 1° de enero siguiente»</i>.',
+ o:['El acto tiene eficacia externa, pero su eficacia interna está diferida hacia el futuro.','El acto carece de perfección.','El acto tiene eficacia retroactiva.','El acto es inválido.'],a:0,
+ e:'Ya se sabe del acto (eficacia externa), pero todavía no hay que cumplirlo (eficacia interna suspendida, art. 51 inc. 1°).',s:'Apunte, V.3.1'},
+{t:'sm',q:'Según el art. 13 de la Ley N° 19.880, ¿cuándo un vicio de procedimiento o de forma afecta la validez del acto?',
+ o:['Siempre que exista cualquier irregularidad formal.','Cuando recae en algún requisito esencial, por su naturaleza o por mandato del ordenamiento, y genera perjuicio al interesado.','Solo cuando lo declara la Contraloría.','Solo cuando el acto es de efectos generales.'],a:1,
+ e:'Los dos requisitos son copulativos. Se expresan en el principio de trascendencia: no hay nulidad sin perjuicio.',s:'Apunte, VI.2; art. 13 LBPA'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué grado de irregularidad corresponde: <i>«Un funcionario subordinado dicta una resolución sin competencia delegada, y luego el superior competente la ratifica»</i>.',
+ o:['Vicio invalidante.','Vicio subsanable.','Vicio no invalidante.','Inexistencia.'],a:1,
+ e:'Es el ejemplo de incompetencia jerárquica subsanada (Dictamen CGR 64.860 de 2016).',s:'Apunte, VI.2'},
+{t:'sm',q:'En relación a la siguiente narración, determine la vía correcta: <i>«La resolución que puso término al procedimiento contiene un error de cálculo en el monto de la multa»</i>.',
+ o:['Invalidación del art. 53.','Revocación del art. 61.','Aclaración o rectificación del art. 62, en cualquier momento.','Recurso extraordinario de revisión.'],a:2,
+ e:'Es un vicio no invalidante: no se invalida nada, se corrige. El art. 62 permite rectificar en cualquier momento errores de copia, referencia o cálculo.',s:'Apunte, VI.2; art. 62 LBPA'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué figura corresponde: <i>«La autoridad ambiental deja sin efecto parcialmente una Resolución de Calificación Ambiental porque las variables ambientales tenidas en vista variaron sustancialmente»</i>.',
+ o:['Invalidación.','Revocación.','Nulidad de Derecho Público.','Abandono.'],a:1,
+ e:'El acto nació bien, pero dejó de convenir: es revocación (art. 25 quinquies Ley 19.300). Si hubiera nacido viciado, sería invalidación.',s:'Apunte, VI.6'},
+{t:'sm',q:'Según lo explicado en clases, ¿cuál es la regla que debe retenerse sobre los efectos temporales de la invalidación?',
+ o:['Opera siempre y solo hacia el futuro.','Opera en principio ex tunc, pero su retroactividad cede ante los derechos adquiridos de buena fe y la seguridad jurídica.','Opera siempre ex tunc, sin excepción alguna.','No produce efectos mientras no la confirme un tribunal.'],a:1,
+ e:'Es el principio de conservación (CGR 54.179/2004; CS rol 3078-2013). Pierry sostiene ex nunc y Soto Kloss ex tunc.',s:'Apunte, VI.7'},
+{t:'sm',q:'En relación a la siguiente acción, determine a qué clase corresponde: <i>«Demanda de indemnización de perjuicios por responsabilidad extracontractual del Fisco»</i>.',
+ o:['Acción de nulidad, con efectos erga omnes.','Acción de plena jurisdicción, con efectos relativos y sujeta a prescripción según el Código Civil.','Recurso jerárquico.','Recurso de revisión.'],a:1,
+ e:'Busca restablecer o compensar un derecho, no hacer desaparecer el acto. La acción de nulidad, en cambio, tiene efectos erga omnes y requiere ley expresa.',s:'Apunte, VII.1'},
+{t:'sm',q:'En relación a la siguiente narración, determine la vía idónea: <i>«Una municipalidad dicta un decreto que revoca una patente comercial, y el afectado alega su ilegalidad»</i>.',
+ o:['Nulidad de Derecho Público ante el juez civil.','Reclamo de ilegalidad municipal ante la Corte de Apelaciones.','Recurso de protección, en todo caso.','Recurso extraordinario de revisión.'],a:1,
+ e:'Primero se busca la acción especial (art. 151 LOC de Municipalidades). La NDP solo procede a falta de ella, y la protección no sustituye a ninguna de las dos.',s:'Apunte, VII.3'},
+{t:'sm',q:'En relación a la siguiente narración, valore la actuación del interesado según el art. 54 de la Ley N° 19.880: <i>«Interpuso recurso de reposición y, al día siguiente, dedujo ante los tribunales la misma pretensión»</i>.',
+ o:['Es procedente, porque puede usar ambas vías a la vez.','No es procedente: debe esperar que la reclamación se resuelva o se entienda desestimada; mientras tanto, el plazo judicial se interrumpe.','Es procedente solo si el acto es de mero trámite.','No es procedente, porque la vía judicial está siempre cerrada tras recurrir.'],a:1,
+ e:'Habiendo elegido la vía administrativa, debe esperar su término. A la inversa, si acciona en tribunales, la Administración debe inhibirse.',s:'Apunte, VII.5; art. 54 LBPA'},
+{t:'sm',q:'En relación a la supletoriedad de la Ley N° 19.880, determine qué grado corresponde: <i>«No existe ningún procedimiento especial para autorizar la importación de iguanas»</i>.',
+ o:['Primer grado.','Segundo grado.','Exclusión formal.','Exclusión material.'],a:0,
+ e:'Sin procedimiento especial alguno, la LBPA se aplica al 100 % (Dictamen CGR 54.769 de 2012). El segundo grado supone un procedimiento especial con vacíos.',s:'Apunte, VIII.2'},
+{t:'sm',q:'Determine qué criterio corresponde a la siguiente situación: <i>«Aplicar los plazos de la Ley N° 19.880 al sumario administrativo extendería indebidamente su duración, por lo que no se aplican»</i>.',
+ o:['Primer grado de supletoriedad.','Criterio excepcional más favorable.','Exclusión material.','Exclusión formal.'],a:2,
+ e:'La LBPA no se aplica cuando desnaturaliza el procedimiento especial. La exclusión formal, en cambio, se basa solo en la existencia del procedimiento especial.',s:'Apunte, VIII.2'},
+{t:'sm',q:'¿A cuál de las siguientes entidades se aplica la Ley N° 18.575, pero no el procedimiento de la Ley N° 19.880?',
+ o:['A la Contraloría General de la República.','A las Fuerzas Armadas.','Al Banco Central.','A las municipalidades.'],a:2,
+ e:'La LBPA excluye al Banco Central y a las empresas públicas creadas por ley (art. 2). La Contraloría, las FF.AA. y las municipalidades sí están incluidas.',s:'Apunte, VIII.3; art. 2 LBPA'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué forma de terminación corresponde: <i>«El solicitante de un permiso de edificación no acompaña el plano que se le requirió; tras más de 30 días de paralización, la autoridad le advierte y deja pasar 7 días más»</i>.',
+ o:['Desistimiento.','Renuncia.','Abandono.','Imposibilidad material sobreviniente.'],a:2,
+ e:'Art. 43 LBPA: paralización por más de 30 días por inactividad del interesado, advertencia y plazo de 7 días.',s:'Apunte, VIII.4.1; art. 43 LBPA'},
+{t:'sm',q:'¿Qué diferencia existe entre el desistimiento y la renuncia en el procedimiento administrativo?',
+ o:['Ninguna: ambos extinguen el derecho sustantivo.','El desistimiento abandona el procedimiento conservando el derecho; la renuncia abandona el derecho mismo.','La renuncia solo procede en procedimientos de oficio.','El desistimiento requiere escritura pública.'],a:1,
+ e:'Además, la renuncia solo procede cuando no está prohibida por el ordenamiento (art. 42).',s:'Apunte, VIII.4.1; art. 42 LBPA'},
+{t:'sm',q:'Según el art. 46 de la Ley N° 19.880, ¿cuándo se entiende practicada la notificación electrónica al domicilio digital único?',
+ o:['El mismo día del envío.','Al tercer día hábil siguiente contado desde la fecha del envío.','Al quinto día corrido desde la recepción.','Cuando el interesado abre el correo.'],a:1,
+ e:'Es la regla general tras la transformación digital. Con carta certificada, a petición del interesado, se cuenta desde la recepción en la oficina de correos.',s:'Apunte, VIII.4.3; art. 46 LBPA'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué ocurre: <i>«La resolución nunca fue notificada, pero el interesado presenta un escrito pidiendo prórroga para cumplirla»</i>.',
+ o:['El acto sigue sin notificar hasta que se practique la notificación personal.','Opera la notificación tácita: se entiende notificado desde esa gestión, pues supone necesariamente su conocimiento.','El acto es nulo por falta de notificación.','Debe publicarse en el Diario Oficial.'],a:1,
+ e:'Art. 47 LBPA. No operaría si su primera gestión hubiera sido reclamar la falta o nulidad de la notificación.',s:'Apunte, VIII.4.3; art. 47 LBPA'},
+{t:'sm',q:'Frente a la representación de un decreto por la Contraloría, ¿qué puede hacer el Presidente de la República según lo explicado en clases?',
+ o:['Insistir mediante un decreto firmado por todos sus ministros.','Ordenar al Contralor que tome razón.','Recurrir de protección.','Publicarlo sin más trámite.'],a:0,
+ e:'Es el decreto de insistencia (art. 99 CPR); el Contralor debe dar cuenta a la Cámara de Diputados. Si los vicios son salvables, la Administración también puede retirar el acto.',s:'Apunte, VIII.4.2'},
+{t:'vf',q:'Toda ilegalidad de un acto administrativo provoca necesariamente su nulidad.',a:false,
+ e:'Falso. No toda ilegalidad anula, pero toda nulidad viene de una ilegalidad (Huepe). Rigen la trascendencia y la conservación.',s:'Apunte, VI.1'},
+{t:'vf',q:'La presunción de validez de los actos administrativos los hace inimpugnables mientras estén vigentes.',a:false,
+ e:'Falso. Es iuris tantum: admite prueba en contrario y el acto puede ser suspendido o anulado.',s:'Apunte, III'},
+{t:'vf',q:'Para la cátedra, el acto administrativo se perfecciona con su notificación o publicación.',a:false,
+ e:'Falso. Se perfecciona al dictarse. La notificación o publicación determina su vigencia.',s:'Apunte, V.1'},
+{t:'vf',q:'Un acto administrativo puede ser válido y, al mismo tiempo, ineficaz.',a:true,
+ e:'Verdadero. Validez y eficacia son planos independientes: un acto válido no notificado es ineficaz.',s:'Apunte, V.4'},
+{t:'vf',q:'La Ley N° 19.880 se aplica a las empresas públicas creadas por ley.',a:false,
+ e:'Falso. El art. 2 no las incluye. Sí están en el ámbito de la Ley 18.575.',s:'Apunte, VIII.3'},
+{t:'vf',q:'La invalidación de un acto administrativo exige audiencia previa del interesado.',a:true,
+ e:'Verdadero. Art. 53 LBPA. Omitirla es un vicio invalidante (CS, Grupo CAVALA, rol 22.230-2016).',s:'Apunte, VI.6'},
+{t:'vf',q:'Es procedente pedir al juez que anule un acto administrativo alegando que perdió su mérito o conveniencia.',a:false,
+ e:'Falso. Eso corresponde a la revocación, potestad de la Administración. El juez solo controla la legalidad.',s:'Apunte, VI.6'},
+{t:'vf',q:'La infracción al deber de abstención del art. 12 de la Ley N° 19.880 invalida siempre el acto.',a:false,
+ e:'Falso. Es un vicio no invalidante: genera responsabilidad disciplinaria del funcionario.',s:'Apunte, VI.2; art. 12 LBPA'},
+{t:'vf',q:'El recurso de protección es, propiamente, un proceso contencioso administrativo.',a:false,
+ e:'Falso. Opera como «sustituto incompleto» de la justicia administrativa; suele rechazarse cuando hay acción sectorial.',s:'Apunte, VII.3'},
+{t:'vf',q:'La Nulidad de Derecho Público se interpone ante los juzgados civiles, en juicio ordinario, a falta de una acción especial.',a:true,
+ e:'Verdadero. Es una acción innominada de creación doctrinal y jurisprudencial, fundada en los arts. 6, 7 y 38 CPR.',s:'Apunte, VII.3'},
+{t:'vf',q:'El recurso extraordinario de revisión procede contra actos firmes, por causales tasadas, dentro del plazo de un año.',a:true,
+ e:'Verdadero. Art. 60 LBPA.',s:'Apunte, VII.2; art. 60 LBPA'},
+{t:'vf',q:'La autoridad que resuelve un recurso administrativo solo puede confirmar o modificar el acto impugnado.',a:false,
+ e:'Falso. La resolución que acoge el recurso puede modificar, reemplazar o dejar sin efecto el acto (art. 59).',s:'Art. 59 LBPA'},
+{t:'vf',q:'El procedimiento de toma de razón se rige supletoriamente por la Ley N° 19.880.',a:false,
+ e:'Falso. El art. 1° lo remite a la Constitución y a la LOC de la Contraloría; la LBPA nunca suple en él.',s:'Apunte, VIII.3'},
+{t:'vf',q:'Los actos de efectos individuales deben notificarse a más tardar dentro de los cinco días siguientes a aquel en que quedaron totalmente tramitados.',a:true,
+ e:'Verdadero. Art. 45 LBPA, con su texto íntegro.',s:'Art. 45 LBPA'},
+{t:'vf',q:'Los actos que afectan a personas cuyo paradero se ignora se publican en el Diario Oficial los días 1° o 15 de cada mes, o al día siguiente si es inhábil.',a:true,
+ e:'Verdadero. Art. 48 letra c) e inciso final.',s:'Art. 48 LBPA'},
+{t:'vf',q:'Según el Tribunal Constitucional, los decretos reglamentarios deben siempre someterse a toma de razón.',a:true,
+ e:'Verdadero, según lo explicado en clases. El Contralor puede eximir otras materias no esenciales (resoluciones exentas).',s:'Apunte, VIII.4.2'},
+{t:'vf',q:'Según la Ley N° 19.880 vigente, la autoridad puede invalidar sus actos contrarios a derecho dentro de dos años desde su notificación o publicación.',a:false,
+ e:'Falso según la ley vigente: el art. 53 fija un año. El apunte y Silva Cimma todavía dicen dos años.',s:'Art. 53 LBPA vigente'}
+];
+
+</script>
+
+<script>
+/* Pestañas + motor de preguntas (alternativas y V/F). Datos en window.PREG = [{t:'sm'|'vf', q, o:[...], a:indice|true|false, e, s, k}] */
+(function(){
+  var KEY=document.body.dataset.key||'admin';
+  function sget(k){try{return JSON.parse(localStorage.getItem(KEY+'-'+k))}catch(e){return null}}
+  function sset(k,v){try{localStorage.setItem(KEY+'-'+k,JSON.stringify(v))}catch(e){}}
+
+  // Pestañas
+  var tabs=[].slice.call(document.querySelectorAll('nav [role=tab]'));
+  function show(id){
+    tabs.forEach(function(t){var on=t.dataset.s===id;t.setAttribute('aria-selected',on);var p=document.getElementById(t.dataset.s);if(p)p.hidden=!on;});
+    sset('tab',id);
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.s);window.scrollTo({top:0});});});
+  var s=sget('tab'); if(s&&document.getElementById(s)&&tabs.length)show(s);
+
+  // Preguntas
+  var box=document.getElementById('quizbox'); if(!box||!window.PREG)return;
+  var L='abcdefgh';
+  // Baraja las alternativas con semilla fija por pregunta, para que la correcta no caiga siempre en la misma letra
+  function rng(seed){return function(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;};}
+  var data=window.PREG.map(function(x,i){
+    x.id=i;
+    if(x.t==='sm'&&!x.fijo){
+      var r=rng(i*7919+(document.body.dataset.key||'').length*31+17), idx=x.o.map(function(_,j){return j;});
+      for(var k=idx.length-1;k>0;k--){var j=Math.floor(r()*(k+1));var t=idx[k];idx[k]=idx[j];idx[j]=t;}
+      x.o=idx.map(function(j){return x.o[j];}); x.a=idx.indexOf(x.a);
+    }
+    return x;
+  });
+  var resp=sget('resp')||{}; var corregido=false;
+  var filtro=document.getElementById('qfiltro');
+  function lista(){
+    var f=filtro?filtro.value:'todo';
+    var orden=sget('orden');
+    var arr=data.filter(function(x){return f==='todo'||x.t===f||(x.k&&x.k===f);});
+    if(orden){var pos={};orden.forEach(function(id,i){pos[id]=i});arr.sort(function(a,b){return (pos[a.id]??a.id)-(pos[b.id]??b.id)});}
+    return arr;
+  }
+  function esc(t){return t}
+  function render(){
+    var arr=lista(); box.innerHTML='';
+    arr.forEach(function(x,n){
+      var d=document.createElement('div'); d.className='q'+(corregido?' done':'');
+      var head='<div class="qn"><span>'+(n+1)+' · '+(x.t==='vf'?'Verdadero o falso':'Selección múltiple')+'</span>'+(x.k?'<span>· '+x.k+'</span>':'')+'</div>';
+      var body='<p class="qt">'+esc(x.q)+'</p>';
+      var nm='q'+x.id;
+      if(x.t==='vf'){
+        body+='<div class="vf">'+[['V',true],['F',false]].map(function(p){
+          var ch=resp[x.id]===p[1]?' checked':'';
+          var cls=corregido?(p[1]===x.a?' class="ok"':(resp[x.id]===p[1]?' class="bad"':'')):'';
+          return '<label'+cls+'><input type="radio" name="'+nm+'" value="'+p[1]+'"'+ch+(corregido?' disabled':'')+'><span><b>'+p[0]+'</b></span></label>';
+        }).join('')+'</div>';
+      }else{
+        body+=x.o.map(function(o,j){
+          var ch=resp[x.id]===j?' checked':'';
+          var cls=corregido?(j===x.a?' class="ok"':(resp[x.id]===j?' class="bad"':'')):'';
+          return '<label'+cls+'><input type="radio" name="'+nm+'" value="'+j+'"'+ch+(corregido?' disabled':'')+'><span>'+L[j]+') '+o+'</span></label>';
+        }).join('');
+      }
+      var ok=resp[x.id]===x.a;
+      var correcta=x.t==='vf'?(x.a?'Verdadero':'Falso'):(L[x.a]+')');
+      body+='<div class="exp"><span class="res '+(ok?'ok':'bad')+'">'+(resp[x.id]===undefined?'Sin responder':(ok?'Correcta':'Incorrecta'))+' · respuesta: '+correcta+'</span><p>'+x.e+'</p>'+(x.s?'<p class="src">'+x.s+'</p>':'')+'</div>';
+      d.innerHTML=head+body; box.appendChild(d);
+      [].forEach.call(d.querySelectorAll('input'),function(inp){inp.addEventListener('change',function(){
+        resp[x.id]=x.t==='vf'?(inp.value==='true'):parseInt(inp.value,10); sset('resp',resp); cuenta();
+      });});
+    });
+    cuenta();
+  }
+  function cuenta(){
+    var arr=lista(), r=0, b=0;
+    arr.forEach(function(x){if(resp[x.id]!==undefined){r++; if(resp[x.id]===x.a)b++;}});
+    [].forEach.call(document.querySelectorAll('.score'),function(el){
+      el.textContent=corregido?('Puntaje: '+b+' de '+arr.length+(arr.length?' ('+Math.round(100*b/arr.length)+' %)':'')):('Respondidas: '+r+' de '+arr.length);
+    });
+  }
+  function corregir(){corregido=true;render();window.scrollTo({top:box.offsetTop-80});}
+  function reiniciar(){resp={};sset('resp',resp);corregido=false;render();window.scrollTo({top:0});}
+  function mezclar(){var ids=data.map(function(x){return x.id});for(var i=ids.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=ids[i];ids[i]=ids[j];ids[j]=t;}sset('orden',ids);resp={};sset('resp',resp);corregido=false;render();}
+  [].forEach.call(document.querySelectorAll('[data-q=corregir]'),function(b){b.addEventListener('click',corregir)});
+  [].forEach.call(document.querySelectorAll('[data-q=reiniciar]'),function(b){b.addEventListener('click',reiniciar)});
+  [].forEach.call(document.querySelectorAll('[data-q=mezclar]'),function(b){b.addEventListener('click',mezclar)});
+  if(filtro)filtro.addEventListener('change',function(){corregido=false;render();});
+  render();
+})();
+
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}</script>
+</body></html>
