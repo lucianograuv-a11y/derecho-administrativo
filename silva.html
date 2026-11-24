@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Silva Cimma</title>
+<meta name="theme-color" content="#f6f3ec">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Archivo+Narrow:wght@500;700&display=swap">
+<style>/* Layout: una columna para celular; bandas de color suaves por tema, como un folleto plegable */
+:root{
+  --bg:#f6f3ec; --fg:#24221f; --muted:#5f5a52; --line:#d9d2c4; --card:#fffdf8;
+  --mostaza:#e7d38f; --salvia:#bfd8b8; --cielo:#b9d3e4; --rosa:#ebc0c6; --durazno:#efc9a4;
+  --tinta:#3b5a73; --ok:#3f7a52; --warn:#9a5b1f;
+  --f-display:"Archivo",system-ui,sans-serif; --f-body:"Archivo",system-ui,sans-serif; --f-label:"Archivo Narrow","Arial Narrow",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1c1b19; --fg:#ece7dd; --muted:#b3ab9d; --line:#3b3833; --card:#252321;
+  --mostaza:#5c5232; --salvia:#3d5240; --cielo:#34495a; --rosa:#5a3c42; --durazno:#5c4632;
+  --tinta:#a9c6dc; --ok:#8fc29f; --warn:#e2ad78; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1c1b19; --fg:#ece7dd; --muted:#b3ab9d; --line:#3b3833; --card:#252321;
+  --mostaza:#5c5232; --salvia:#3d5240; --cielo:#34495a; --rosa:#5a3c42; --durazno:#5c4632;
+  --tinta:#a9c6dc; --ok:#8fc29f; --warn:#e2ad78; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header h1{font-family:var(--f-display);font-weight:800;font-size:1.9rem;line-height:1.05;letter-spacing:-.02em;margin:.4rem 0 .3rem;text-wrap:balance}
+header p{margin:0;color:var(--muted)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:10px 0;margin:10px 0 4px;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;font-family:var(--f-label);font-weight:700;font-size:.85rem;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 12px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+nav button:focus-visible,summary:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+section{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.band{border-radius:14px;padding:14px 16px;min-width:0}
+.mostaza{background:var(--mostaza)}.salvia{background:var(--salvia)}.cielo{background:var(--cielo)}.rosa{background:var(--rosa)}.durazno{background:var(--durazno)}
+h2{font-family:var(--f-display);font-weight:800;font-size:1.25rem;line-height:1.15;margin:0 0 6px;text-wrap:balance}
+h3{font-family:var(--f-label);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--muted)}
+.band h3{color:inherit;opacity:.75}
+p{margin:0}
+ul{margin:4px 0 0;padding-left:1.1em}
+li{margin:2px 0}
+.def{font-size:1rem;border-left:3px solid currentColor;padding-left:10px;margin-top:6px}
+.src{font-family:var(--f-label);font-size:.8rem;color:var(--muted);margin-top:6px}
+.band .src{color:inherit;opacity:.7}
+.star{display:inline-block;font-family:var(--f-label);font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;background:var(--fg);color:var(--bg);border-radius:6px;padding:1px 7px;margin-left:4px;vertical-align:2px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.split{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.tag{font-family:var(--f-label);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase}
+.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0}
+summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:600;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--f-label);font-weight:700;color:var(--muted)}
+details[open] summary::after{content:"–"}
+details .in{padding:0 14px 12px;color:var(--fg)}
+.flow{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:8px 0}
+.step b.n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--fg);color:var(--bg);font-family:var(--f-label);font-weight:700}
+.arrow{margin-left:13px;width:2px;height:10px;background:var(--line)}
+.cmp{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:96px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:8px}
+.row:first-child{border-top:0;padding-top:0}
+.k{font-family:var(--f-label);font-weight:700}
+.num{font-variant-numeric:tabular-nums;font-weight:800}
+.quiz details summary{font-weight:600}
+.quiz .in{border-top:1px dashed var(--line);padding-top:10px}
+footer{color:var(--muted);font-size:.85rem;margin-top:18px}
+@media (prefers-reduced-motion:no-preference){section{animation:fade .18s ease-out}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+
+/* Agregados: barra de inicio, preguntas interactivas, avisos de discrepancia */
+.home{display:inline-block;font-family:var(--f-label);font-weight:700;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta);text-decoration:none;margin-top:4px}
+.ojo{border:1.5px dashed var(--warn);border-radius:12px;padding:10px 12px;background:var(--card)}
+.ojo b.t{color:var(--warn);font-family:var(--f-label);letter-spacing:.04em;text-transform:uppercase;font-size:.8rem;display:block;margin-bottom:2px}
+.pares{display:grid;gap:10px}
+.par{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.par h2{font-size:1.05rem;margin-bottom:8px}
+.par .split{margin-top:4px}
+.par .lado{border-left:3px solid var(--line);padding-left:9px;min-width:0}
+.par .lado .tag{display:block;margin-bottom:2px}
+.par .imp{margin-top:8px;font-size:.92rem;border-top:1px dashed var(--line);padding-top:7px}
+.qbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 2px}
+.qbar button,.qfoot button{font-family:var(--f-label);font-weight:700;font-size:.85rem;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--fg);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;cursor:pointer}
+.qbar button.pri,.qfoot button.pri{background:var(--fg);color:var(--bg)}
+.qbar select{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 10px}
+.score{font-family:var(--f-display);font-weight:800;font-size:1.2rem}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.q .qn{font-family:var(--f-label);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.q .qt{margin:4px 0 8px;font-weight:600}
+.q .qt i{font-weight:500}
+.q label{display:grid;grid-template-columns:22px 1fr;gap:6px;align-items:start;padding:6px 6px;border-radius:8px;cursor:pointer}
+.q label:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.q input{margin-top:4px;accent-color:var(--fg)}
+.q label.ok{background:color-mix(in srgb,var(--ok) 18%,transparent)}
+.q label.bad{background:color-mix(in srgb,var(--warn) 20%,transparent);text-decoration:line-through}
+.q .exp{display:none;margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;font-size:.93rem}
+.q.done .exp{display:block}
+.q .res{font-family:var(--f-label);font-weight:700;text-transform:uppercase;font-size:.78rem;letter-spacing:.05em}
+.q .res.ok{color:var(--ok)}.q .res.bad{color:var(--warn)}
+.q .vf{display:flex;gap:10px}
+.q .vf label{grid-template-columns:22px auto;border:1px solid var(--line);padding:6px 14px}
+.qfoot{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.menu{display:grid;gap:10px}
+.menu a{display:block;text-decoration:none;color:inherit;border-radius:14px;padding:14px 16px}
+.menu a b{font-family:var(--f-display);font-weight:800;font-size:1.15rem;display:block}
+.menu a span{color:inherit;opacity:.8;font-size:.92rem}
+.hora{font-family:var(--f-label);font-weight:700;font-variant-numeric:tabular-nums}
+.check{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;padding:6px 0;border-top:1px solid var(--line)}
+.check:first-of-type{border-top:0}
+.check input{margin-top:4px;accent-color:var(--fg);width:18px;height:18px}
+</style>
+</head><body data-key="silva">
+<div class="wrap">
+<header>
+  <a class="home" href="./">← Inicio</a>
+  <h3>Derecho Administrativo II · torpedo</h3>
+  <h1>Silva Cimma: clasificación y extinción del acto</h1>
+  <p>Capítulos IV y V. Lo marcado con <span class="star">prueba</span> ya lo preguntaron en la 1.ª evaluación: ahora preguntarán el lado que falta.</p>
+</header>
+
+<nav role="tablist" aria-label="Temas">
+  <button role="tab" aria-selected="true" data-s="mapa">Mapa</button>
+  <button role="tab" aria-selected="false" data-s="trad">Tradicionales</button>
+  <button role="tab" aria-selected="false" data-s="mod">Modernas</button>
+  <button role="tab" aria-selected="false" data-s="lbpa">LBPA</button>
+  <button role="tab" aria-selected="false" data-s="efe">Efectos</button>
+  <button role="tab" aria-selected="false" data-s="vicios">Vicios</button>
+  <button role="tab" aria-selected="false" data-s="chile">Nulidad en Chile</button>
+  <button role="tab" aria-selected="false" data-s="ext">Extinción</button>
+  <button role="tab" aria-selected="false" data-s="preg">Preguntas</button>
+</nav>
+
+<!-- MAPA -->
+<section id="mapa" role="tabpanel">
+  <div class="band mostaza">
+    <h3>Cómo pregunta el profesor este texto</h3>
+    <p>Casi todo es «<b>según el texto</b>, ¿cuál es la diferencia entre X e Y?» o «en relación a la siguiente descripción, determine qué clase de acto corresponde». Si dominas <b>los pares</b> y <b>un ejemplo de cada uno</b>, el texto está dominado.</p>
+  </div>
+  <div class="box">
+    <h2>Capítulo IV · Clasificación (págs. 1–17)</h2>
+    <ul>
+      <li><b>Tradicionales</b> (históricas, hoy superadas): autoridad / gestión · políticos / administrativos · internos / externos.</li>
+      <li><b>Modernas</b>: por extensión de efectos · por efecto en la esfera del particular · por contenido · por incidencia en el patrimonio · por número de órganos · por potestad.</li>
+      <li><b>De la LBPA</b>: terminales / de trámite (con los imperativos) · acto firme.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Capítulo V · Extinción (págs. 17–34)</h2>
+    <ul>
+      <li><b>Efectos</b> del acto en el tiempo.</li>
+      <li><b>Irregularidades</b>: inexistencia, nulidad y anulabilidad, convalidación; doctrina francesa, italiana, española y chilena.</li>
+      <li><b>Extinción</b>: natural o provocada; revocación, invalidación, caducidad y decaimiento.</li>
+    </ul>
+  </div>
+  <div class="ojo"><b class="t">Ojo: el texto y la ley no coinciden en dos puntos</b>
+    <ul>
+      <li><b>Retroactividad:</b> el texto la cita como art. 52 (pág. 10) y como art. 51 (pág. 18); la prueba anterior también dijo «art. 51». En la ley es el <b>art. 52</b>; el 51 es la ejecutoriedad.</li>
+      <li><b>Plazo para invalidar:</b> el texto dice <b>2 años</b> desde la comunicación (pág. 32). El art. 53 vigente dice <b>1 año</b> desde la notificación o publicación. Si preguntan «según el texto», 2 años; si preguntan «según la LBPA», 1 año.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- TRADICIONALES -->
+<section id="trad" role="tabpanel" hidden>
+  <div class="par">
+    <h2>Actos de autoridad · actos de gestión</h2>
+    <p>La formuló el francés <b>Laferrière</b> (presidió el Consejo de Estado). Suponía una <b>doble personalidad</b> del Estado.</p>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Autoridad</span>El Estado como persona de Derecho Público: acto unilateral, imperativo. Ej.: la <b>expropiación</b> (art. 19 n.° 24 CPR).</div>
+      <div class="lado"><span class="tag warn">Gestión privada</span>El Estado en pie de igualdad, bajo Derecho común. Ej.: <b>compraventa</b> de un inmueble para una escuela, <b>arriendo</b>.</div>
+    </div>
+    <p style="margin-top:8px"><b>Gestión pública:</b> contrato con un particular bajo Derecho Público, con dos voluntades. Ej.: <b>contrato de obra pública</b> (contrato administrativo).</p>
+    <div class="imp"><b>Por qué está obsoleta (3 razones):</b>
+      <ol style="margin:4px 0 0;padding-left:1.2em">
+        <li>No hay doble personalidad: el Estado es <b>siempre</b> persona de Derecho Público; solo cambia el régimen que aplica (Silva; Soto: no deja de ser Estado al contratar).</li>
+        <li>No es una verdadera clasificación del acto: es una <b>ordenación civilista</b> entre actos unilaterales (actos administrativos) y bilaterales (contratos públicos).</li>
+        <li>Perdió trascendencia: antes la gestión iba a tribunales ordinarios y la autoridad a los contenciosos, y se decía que el Estado no respondía por los actos de autoridad. Hoy los tribunales conocen de ambos.</li>
+      </ol></div>
+    <p class="src">págs. 1–3</p>
+  </div>
+
+  <div class="par">
+    <h2>Actos políticos o de gobierno · actos propiamente administrativos <span class="star">prueba</span></h2>
+    <p>Políticos: el Presidente decreta estado de sitio, llama a elecciones, nombra jefe de plaza. Son una <b>especie</b> dentro del <b>género</b> acto administrativo.</p>
+    <div class="cmp" style="margin-top:6px">
+      <div class="row"><span class="k">Materia</span><span>Político: actividad gubernamental. Administrativo: función administrativa.</span></div>
+      <div class="row"><span class="k">Responsabilidad</span><span>Político: <b>solo política</b>. Administrativo: <b>civil, penal, administrativa</b> y, eventualmente, política.</span></div>
+      <div class="row"><span class="k">Potestad</span><span>Político: generalmente discrecional.</span></div>
+      <div class="row"><span class="k">Control</span><span>Se decía que el político no tenía control contencioso. Origen: <b>Consejo de Estado francés</b>; España la recogió en su ley de 1956.</span></div>
+    </div>
+    <div class="imp"><b>Por qué en Chile carece de importancia:</b> (1) ambos emanan del <b>mismo órgano</b>, el Presidente; (2) se someten al <b>mismo control preventivo</b> de legalidad y constitucionalidad (y toman la misma forma: decretos o resoluciones); (3) su control jurisdiccional cabe en los <b>tribunales ordinarios desde 1989</b>. Silva la llama «doctrina arcaica».</div>
+    <p class="src">págs. 3–5</p>
+  </div>
+
+  <div class="par">
+    <h2>Actos internos · externos <span class="star">prueba</span></h2>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Interno</span>Dice relación con la Administración y las <b>normas estatutarias del personal</b> (ingreso, deberes, carrera, responsabilidad, cese). Ej.: medida disciplinaria, nombramiento, beneficio a un funcionario.</div>
+      <div class="lado"><span class="tag warn">Externo</span>Se proyecta hacia los particulares. Ej.: <b>concesión</b> de un bien nacional de uso público, <b>expropiación</b>.</div>
+    </div>
+    <div class="imp"><b>Consecuencias que se le atribuían:</b>
+      <ul>
+        <li><b>Cumplimiento:</b> el interno se impone por <b>potestad jerárquica</b> (poder de mando); hoy rige la <b>obediencia reflexiva</b>: el funcionario representa el acto ilegal y, si el superior insiste, cumple y la responsabilidad pasa al superior (arts. 61 f) y 62 Estatuto Administrativo). El externo no tiene potestad jerárquica, pero sí <b>ejecutoriedad</b>: se cumple coactivamente sin ir al juez.</li>
+        <li><b>Control:</b> el externo, siempre vía judicial; el interno, preferentemente vía administrativa.</li>
+      </ul>
+      <b>Por qué en Chile pierde trascendencia:</b> ambos toman la misma forma (decretos, resoluciones), tienen el mismo control preventivo y los mismos recursos; ni el art. 10 de la Ley 18.575 ni el art. 15 LBPA distinguen.</div>
+    <p class="src">págs. 6–8</p>
+  </div>
+</section>
+
+<!-- MODERNAS -->
+<section id="mod" role="tabpanel" hidden>
+  <div class="par">
+    <h2>1 · Según la extensión de sus efectos <span class="star">prueba</span></h2>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Particulares o singulares</span>Personas determinadas. Ej.: nombramiento, ascenso, medida disciplinaria. También «concretos».</div>
+      <div class="lado"><span class="tag warn">Generales</span>Número indeterminado de personas. Manifestación típica en Chile: el <b>reglamento</b>. También «abstractos».</div>
+    </div>
+    <div class="imp">Para la <b>doctrina española</b>, el reglamento <b>no</b> es acto general: es norma; el acto aplica normas (criterio ordinamentalista). En Chile, los arts. 37 bis y 48 LBPA dejan poco margen para excluirlo.<br><b>Importancia práctica:</b> la forma de <b>notificación o publicación</b> (arts. 45 y 48 LBPA).</div>
+    <p class="src">págs. 8–9</p>
+  </div>
+
+  <div class="par">
+    <h2>2 · Según su efecto en la esfera del particular</h2>
+    <ul>
+      <li><b>Favorables:</b> amplían el patrimonio o liberan de un deber. Es un <b>género</b>: no todo acto favorable crea derechos. Ej.: nombramiento, concesión, autorización, dispensa.</li>
+      <li><b>Desfavorables o de gravamen:</b> restringen, imponen obligaciones o sanciones. Ej.: denegatorias, multas, clausuras.</li>
+      <li><b>Con efectos frente a terceros</b> (Maurer): favorable para el destinatario y desfavorable para otros. Ej.: autorizan una industria que daña el turismo del lugar.</li>
+      <li><b>De efecto mixto:</b> para el <b>mismo</b> destinatario, favorable y perjudicial a la vez. Ej.: en la reclamación confirman la falta pero rebajan la sanción.</li>
+    </ul>
+    <div class="imp"><b>Importancia:</b> en los desfavorables la <b>motivación</b> es más imperativa (art. 11 LBPA) y <b>no hay retroactividad</b>; solo la tienen los favorables que no lesionen derechos de terceros (art. 52 LBPA).</div>
+    <p class="src">págs. 9–10</p>
+  </div>
+
+  <div class="par">
+    <h2>3 · Según su contenido</h2>
+    <ul>
+      <li><b>Concesión</b> <span class="star">prueba</span>: traslada al particular una facultad o derecho que <b>antes no poseía</b> (Bocanegra).</li>
+      <li><b>Autorización</b> <span class="star">prueba</span>: <b>levanta una prohibición</b> genérica de ejercer un derecho <b>del que ya se dispone</b>, tras comprobar que se ajusta al interés público. Hoy la línea con la concesión no es tajante (García de Enterría y Fernández: la autorización pasó a regular el mercado).</li>
+      <li><b>Aprobación:</b> otra autoridad presta su acuerdo para que el acto nazca. Ej.: la <b>toma de razón</b>. Se dice que la autorización es <b>previa</b> y la aprobación <b>a posteriori</b>, aunque el legislador usa ambas palabras indistintamente.</li>
+      <li><b>Admisión:</b> incorpora a una persona a un régimen preestablecido. Ej.: decreto que nombra a un funcionario.</li>
+      <li><b>Dispensa:</b> levanta excepcionalmente una prohibición en un caso concreto; exige siempre <b>norma expresa</b> (principio de legalidad).</li>
+      <li><b>Punitivos:</b> sanciones administrativas a funcionarios y a particulares. Ej.: multa del Código Sanitario.</li>
+      <li><b>Denegación:</b> la Administración no da lugar a algo. El problema de la negativa sin resolución formal lo resolvió la LBPA con el <b>silencio positivo y negativo</b> (arts. 64 y 65).</li>
+    </ul>
+    <p class="src">págs. 10–12</p>
+  </div>
+
+  <div class="par">
+    <h2>4 · Según la incidencia en el patrimonio <span class="star">prueba</span></h2>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Constitutivos</span><b>Crean</b> un derecho que no existía (Caldera). Ej.: concesión de playa, beca, pensión de jubilación. Efectos <b>hacia el futuro</b>.</div>
+      <div class="lado"><span class="tag warn">Declarativos</span><b>Reconocen</b> un derecho preexistente, creado por la ley o un acto anterior. Efectos normalmente <b>retroactivos</b>.</div>
+    </div>
+    <div class="imp">Por eso la <b>autorización no puede asimilarse</b> a un acto declarativo.</div>
+    <p class="src">pág. 12</p>
+  </div>
+
+  <div class="par">
+    <h2>5 · Según el número de órganos</h2>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Simples</span>Un solo órgano forma la voluntad.</div>
+      <div class="lado"><span class="tag warn">Complejos</span>Voluntades de varios órganos, <b>concomitantes</b> (no encontradas). Ej.: alcalde y concejo (art. 65 LOC Municipalidades).</div>
+    </div>
+    <div class="imp"><b>Importancia (López):</b> en el complejo, el vicio de la declaración de un órgano afecta la validez de todo el acto.</div>
+    <p class="src">págs. 12–13</p>
+  </div>
+
+  <div class="par">
+    <h2>6 · Según la naturaleza de la potestad</h2>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Reglados</span>Contenido previsto por la ley; la Administración solo <b>constata requisitos</b> (Bocanegra). Ej.: <b>licencia de conducir</b>.</div>
+      <div class="lado"><span class="tag warn">Discrecionales</span>Decide, por interés público, si actúa y con qué contenido, entre opciones igualmente válidas. Ej.: <b>concesión</b> de bienes nacionales de uso público.</div>
+    </div>
+    <p class="src">pág. 13</p>
+  </div>
+</section>
+
+<!-- LBPA -->
+<section id="lbpa" role="tabpanel" hidden>
+  <div class="par">
+    <h2>Terminales · de trámite <span class="star">prueba</span></h2>
+    <div class="split">
+      <div class="lado"><span class="tag ok">Resolutorios o terminales</span>Ponen fin al procedimiento y deciden todas las cuestiones. La LBPA los llama <b>acto decisorio</b> (art. 8), <b>acto terminal</b> (art. 18), <b>decisión final</b> (art. 27), <b>resolución final</b> (arts. 40 y 41). En ellos se ven con más fuerza la presunción de validez, la ejecutividad y la ejecutoriedad. Estructura: parte expositiva, considerativa (<b>motivación</b>) y resolutiva, más los imperativos.</div>
+      <div class="lado"><span class="tag warn">Trámite o preparatorios</span>Se concatenan para que pueda dictarse el acto final: inician, dan curso o sirven para mejor resolver. Incluyen los <b>actos de instrucción</b> (art. 35 LBPA).</div>
+    </div>
+    <div class="imp"><b>Importancia práctica: la impugnabilidad</b> (art. 15 LBPA). Los terminales son reclamables administrativa y judicialmente; los de trámite <b>solo</b> cuando determinen la <b>imposibilidad de continuar</b> el procedimiento o produzcan <b>indefensión</b>.</div>
+    <p class="src">págs. 14–16</p>
+  </div>
+
+  <div class="box">
+    <h2>Los imperativos del acto terminal</h2>
+    <div class="cmp">
+      <div class="row"><span class="k">Anótese</span><span>Numerar y fechar en el servicio de origen. Trámite interno.</span></div>
+      <div class="row"><span class="k">Refréndese</span><span>Verificar que hay <b>recursos</b> para el gasto (ítem variable o leyes especiales). Si el gasto va a un ítem de la Ley de Presupuestos, en ciertos casos se exige <b>visación previa de Hacienda</b>. Trámite interno.</span></div>
+      <div class="row"><span class="k">Regístrese</span><span>Carrera funcionaria (lo lleva la <b>Contraloría</b>, externa) y bienes raíces fiscales (lo lleva <b>Bienes Nacionales</b>, interno).</span></div>
+      <div class="row"><span class="k">Tómese razón</span><span>Examen previo de constitucionalidad y legalidad por la <b>Contraloría</b>: cursa o representa. Es <b>regla general, no absoluta</b>: el Contralor puede eximir actos no esenciales, con controles de reemplazo a posteriori.</span></div>
+      <div class="row"><span class="k">Comuníquese</span><span>Dos acepciones: <b>notificar</b> al interesado (actos de efectos particulares) e <b>informar a Tesorería</b> de un egreso.</span></div>
+      <div class="row"><span class="k">Publíquese</span><span>Inserción en el <b>Diario Oficial</b>: actos generales (reglamentos) o por la naturaleza de la medida (designar ministro).</span></div>
+    </div>
+    <p class="src">págs. 14–15</p>
+  </div>
+
+  <div class="par">
+    <h2>El acto firme</h2>
+    <p>Aparece con el <b>art. 60 LBPA</b>: contra los actos firmes procede el <b>recurso de revisión</b> (ante el superior o, en su defecto, ante quien lo dictó) por causales tasadas: sin debido emplazamiento; error de hecho manifiesto o documentos esenciales ignorados; prevaricación, cohecho, violencia u otra maquinación declarada por sentencia; documentos o testimonios declarados falsos.</p>
+    <p style="margin-top:6px"><b>Concepto</b> (Bocanegra, ley española): el que ya <b>no es susceptible de recurso</b> administrativo ni jurisdiccional, salvo la revisión.</p>
+    <div class="imp"><b>Crítica del texto:</b> figura extraña al Derecho chileno; la firmeza «no aporta», porque los plazos administrativos son breves y los judiciales extensos, así que la firmeza real tardaría mucho.</div>
+    <p class="src">págs. 16–17</p>
+  </div>
+</section>
+
+<!-- EFECTOS -->
+<section id="efe" role="tabpanel" hidden>
+  <div class="band cielo">
+    <h3>Efectos</h3>
+    <p>Son las consecuencias jurídicas concretas del acto (Aguerra): declarar, modificar, constatar, extinguir. Se ligan a la <b>eficacia</b> y esta a la <b>ejecutividad</b>. Aquí importa su extensión en el tiempo.</p>
+  </div>
+  <div class="flow box">
+    <div class="step"><b class="n">1</b><div><b>Favorable y constitutivo</b> → rige desde la total tramitación y la <b>notificación</b>. Ej.: concesión de un sector de playa.</div></div>
+    <div class="arrow"></div>
+    <div class="step"><b class="n">2</b><div><b>Favorable y declarativo</b> → <b>retroactivo</b> a cuando se cumplieron los requisitos. Ej.: jubilación, desde el cese de funciones.</div></div>
+    <div class="arrow"></div>
+    <div class="step"><b class="n">3</b><div><b>Desfavorable</b> → rige desde la total tramitación y la notificación; <b>nunca retroactivo</b> (regla de la LBPA).</div></div>
+  </div>
+  <div class="box"><p>Los efectos perduran mientras el acto subsista (es <b>estable</b>) y desaparecen solo cuando se extinguen.</p><p class="src">págs. 17–18</p></div>
+</section>
+
+<!-- VICIOS -->
+<section id="vicios" role="tabpanel" hidden>
+  <div class="band rosa">
+    <h3>Punto de partida</h3>
+    <p>La <b>presunción de validez</b> (art. 3 LBPA; Rebollo): se actúa como si el acto fuera válido mientras no se declare su nulidad. Acto <b>congénitamente viciado</b> <span class="star">prueba</span>: le falta un elemento determinante o, en términos actuales, una <b>condición de validez</b>.</p>
+    <p class="src">pág. 18</p>
+  </div>
+  <div class="par">
+    <h2>Inexistencia</h2>
+    <p>Viene del Derecho privado. En Derecho Administrativo se aplica <b>con mucha cautela</b>: abre la puerta a que cada uno se haga justicia y choca con la jerarquía y la presunción de validez. Solo casos «burdos o de gabinete» (Rebollo). Ej.: <b>un juez otorga un certificado sanitario</b>.</p>
+    <p class="src">pág. 19</p>
+  </div>
+  <div class="par">
+    <h2>Nulidad · anulabilidad · convalidación <span class="star">prueba</span></h2>
+    <p>En Chile se ha discutido si hay anulabilidad (por el art. 7 CPR, toda nulidad sería absoluta y sin ratificación). El texto matiza: la ley admite <b>subsanar</b> (arts. 13 y 56 LBPA).</p>
+    <p style="margin-top:6px"><b>Convalidación:</b> si el acto tiene un vicio por falta de un <b>requisito menor</b> o hay atisbos de una voluntad no manifestada explícitamente, la Administración lo <b>suple</b>. En Derecho comparado se convalida también por el transcurso de los plazos y por ley.</p>
+    <p class="src">págs. 19–20</p>
+  </div>
+  <div class="par">
+    <h2>Doctrina francesa (casuística, del Consejo de Estado)</h2>
+    <ul>
+      <li><b>Inexistencia</b> (Waline): el acto <b>no deja huella material</b> (decreto sin firma ni fecha; el caso del parlamentario que pedía aplicar como ley un proyecto aprobado solo en comisiones), o emana de un <b>funcionario subalterno sin potestad</b> (carabinero que certifica como Registro Civil).</li>
+      <li><b>Nulidad por vicio de la voluntad:</b> error, fuerza, dolo; el <b>temor a represalias</b> vicia, el mero <b>temor reverencial</b> no.</li>
+      <li><b>Vicios de competencia</b> <span class="star">prueba</span>: <b>exceso</b> de poder (se excede sin invadir competencia ajena), <b>abuso</b> (se excede e invade la de otro órgano), <b>desviación</b> (acto discrecional que se torna arbitrario por falta del motivo necesario).</li>
+    </ul>
+    <p class="src">págs. 20–22</p>
+  </div>
+  <div class="par">
+    <h2>Doctrina italiana (sistemática, más precisa)</h2>
+    <ul>
+      <li><b>Vicio de mérito</b> <span class="star">prueba</span>: oportunidad o conveniencia frente al interés público (Mignone). Se corrige con la <b>revocación</b> (art. 61 LBPA).</li>
+      <li><b>Vicio de ilegitimidad:</b> no conformidad con el <b>modelo legal</b>. Dos tipos:
+        <ul>
+          <li><b>Nulidad</b> (excepcional): falta de elementos esenciales, falta absoluta de atribución, violación de cosa juzgada. Opera de pleno derecho: el obligado puede negarse a cumplir.</li>
+          <li><b>Anulabilidad</b> (regla general): <b>violación de ley, incompetencia y exceso de poder</b>. Efectos retroactivos, pero el acto es eficaz mientras no se suspenda o anule. Los vicios de forma, por regla general, no anulan.</li>
+        </ul></li>
+    </ul>
+    <p class="src">págs. 22–23</p>
+  </div>
+  <div class="par">
+    <h2>Doctrina española <span class="star">prueba</span></h2>
+    <p>Tres grados: <b>nulidad de pleno derecho</b>, <b>anulabilidad</b> e <b>irregularidades no invalidantes</b> (García de Enterría y Fernández).</p>
+    <div class="split" style="margin-top:6px">
+      <div class="lado"><span class="tag warn">Nulo de pleno derecho</span>Casos más graves, <b>tasados</b> y de interpretación restrictiva. <b>Imprescriptible</b>, efectos <b>ex tunc</b>, de orden público (de oficio), <b>insubsanable</b>.</div>
+      <div class="lado"><span class="tag ok">Anulable</span>Todo lo demás. <b>Inicialmente válido</b>; lo alegan solo ciertos sujetos y en plazo (prescribe); <b>convalidable</b>; la sentencia es constitutiva.</div>
+    </div>
+    <div class="imp">Rechaza la inexistencia. <b>Parada:</b> es inútil, porque la nulidad de pleno derecho cubre esos casos.</div>
+    <p class="src">págs. 23–24</p>
+  </div>
+</section>
+
+<!-- CHILE -->
+<section id="chile" role="tabpanel" hidden>
+  <div class="band mostaza"><p>En Chile cuesta hablar de un <b>sistema</b> de nulidad de Derecho Público: normas escasas (Reyes) y arts. 6 y 7 CPR ambiguos. El texto expone <b>cuatro</b> posiciones y luego la LBPA.</p></div>
+  <div class="par">
+    <h2>1 · Bernaschina (años 50, CPR de 1925)</h2>
+    <div class="split">
+      <div class="lado"><span class="tag warn">Nulidad absoluta</span>Autoridad que actúa <b>fuera de su competencia</b>. Opera <b>de pleno derecho</b>, sin declaración judicial.</div>
+      <div class="lado"><span class="tag ok">Ilegalidad o anulabilidad</span>Actúa <b>dentro de su competencia pero fuera de la ley</b>. Requiere declaración jurisdiccional.</div>
+    </div>
+    <div class="imp">Bases: art. 1462 CC (objeto ilícito) y arts. 4, 23 y 75 CPR 1925. Fue el primero en tratarlo con criterio científico.</div>
+  </div>
+  <div class="par">
+    <h2>2 · Silva (crítica y tesis propia)</h2>
+    <p><b>Critica a Bernaschina:</b> olvida el carácter orgánico-formal del acto; si cualquier funcionario pudiera desconocer el acto «incompetente» se consagraría la <b>anarquía</b> (presunción de validez); no dice la causal; no considera exceso, abuso y desviación; y la distinción nulidad/anulabilidad es intrascendente.</p>
+    <ul>
+      <li>Rechaza la <b>inexistencia</b>.</li>
+      <li>La nulidad administrativa tiene normas propias, distintas del Derecho privado.</li>
+      <li>Los arts. 4, 23 y 75 CPR 1925 (hoy 7 incs. 2 y 3, y 35) son «llamados de atención», no una teoría de nulidad.</li>
+      <li><b>No distingue</b> nulidad y anulabilidad.</li>
+      <li>La nulidad requiere <b>declaración jurisdiccional</b> (tribunales ordinarios desde 1989).</li>
+      <li>Sobre si rige hacia atrás o hacia adelante: no se pronuncia en forma terminante; <b>caso a caso</b>.</li>
+    </ul>
+  </div>
+  <div class="par">
+    <h2>3 · Soto Kloss <span class="star">prueba</span></h2>
+    <p>Un solo grado de invalidez: la <b>Nulidad de Derecho Público</b> (art. 7 CPR; origen remoto: art. 160 CPR 1833). Es <b>ipso iure, insanable e imprescriptible</b>, y en esencia una <b>inexistencia</b>.</p>
+    <ul>
+      <li>El juez solo <b>constata</b> el vicio, pero la declaración igual se necesita (nadie se hace justicia por mano propia).</li>
+      <li>La autoridad no puede convalidar («es nulo», en presente).</li>
+      <li>Se alega en cualquier tiempo; el juez puede declararla <b>de oficio</b>; efectos <b>retroactivos</b>.</li>
+      <li>Acogida por los tribunales en los <b>años 90</b>.</li>
+    </ul>
+  </div>
+  <div class="par">
+    <h2>4 · Pierry</h2>
+    <p>Las demandas de nulidad suelen ir con <b>indemnización de perjuicios</b>: lo que se busca es esta. Son acciones de <b>plena jurisdicción</b>; el juez acoge o rechaza según el mérito sin elegir teoría de nulidad. Si la acción indemnizatoria <b>prescribió</b>, rechaza. Duda que la CPR consagre nulidad ipso iure e insanable. Acogida por la <b>Corte Suprema desde inicios del siglo XXI</b>.</p>
+  </div>
+  <div class="par">
+    <h2>La LBPA (Vergara)</h2>
+    <p>No distingue grados como la ley española. Distingue <b>fondo</b> y <b>forma</b>:</p>
+    <ul>
+      <li><b>Vicios de fondo</b> (Derecho sustantivo): siempre invalidables (<b>art. 53</b>).</li>
+      <li><b>Vicios de forma o procedimiento</b> (art. 13), tres categorías:
+        <ul>
+          <li><b>Invalidantes:</b> recaen en requisito esencial <b>y</b> causan perjuicio. Ej.: falta de motivación. Van a invalidación (art. 53).</li>
+          <li><b>Subsanables:</b> esenciales, pero sin perjuicio ni afectar terceros. Art. 13 inciso final (acto terminal) y <b>art. 56</b> (actos de trámite).</li>
+          <li><b>No esenciales:</b> la <b>regla general</b>; no afectan la validez.</li>
+        </ul></li>
+    </ul>
+    <p class="src">págs. 24–28</p>
+  </div>
+</section>
+
+<!-- EXTINCION -->
+<section id="ext" role="tabpanel" hidden>
+  <div class="split">
+    <div class="band salvia"><h3>Natural o normal <span class="star">prueba</span></h3><p>Se cumple el objeto, vence el <b>plazo</b> o se verifica la <b>condición</b>. <b>Sin que intervenga otro acto.</b></p></div>
+    <div class="band durazno"><h3>Provocada o anticipada</h3><p>Una <b>nueva declaración</b> de la Administración o de un tribunal elimina el acto o sus efectos.</p></div>
+  </div>
+  <div class="box">
+    <h2>Razones y vías</h2>
+    <p><b>Razones:</b> ilegalidad original o sobrevenida; pérdida del mérito; incumplimiento de una obligación.</p>
+    <p style="margin-top:6px"><b>«Retiro»</b> es el nombre genérico de las vías.</p>
+    <ul>
+      <li><b>Vía judicial:</b> solo la <b>nulidad</b> por ilegalidad congénita.</li>
+      <li><b>Vía administrativa:</b> <b>invalidación</b> (ilegalidad original), <b>revocación</b> (mérito), <b>caducidad</b> (incumplimiento) y los <b>recursos</b>, que eliminan por ilegalidad o por inconveniencia (arts. 15 y 59).</li>
+    </ul>
+    <p class="src">págs. 28–29</p>
+  </div>
+  <div class="par">
+    <h2>Revocación <span class="star">prueba</span></h2>
+    <p>Medida de la <b>propia Administración activa</b> para dejar sin efecto un acto por <b>mérito, oportunidad o conveniencia</b>. Es un <b>acto de contrario imperio</b>. Base: <b>art. 61 LBPA</b>.</p>
+    <ul>
+      <li>La revocabilidad <b>no es la regla general</b>: no es de la esencia del acto.</li>
+      <li><b>Discrecionales:</b> revocables por mérito.</li>
+      <li><b>Reglados:</b> por regla general <b>irrevocables</b> por mérito. Ej.: no se revoca un nombramiento porque el funcionario resultó malo; se necesita otro acto (exoneración). Tampoco una medida disciplinaria afinada.</li>
+      <li><b>Generales</b> (reglamento): revocables sin limitación. <b>Particulares</b> que conceden o declaran derechos: protegidos por el derecho de propiedad.</li>
+      <li><b>Irrevocables:</b> efectos consumados y actos que <b>agotan la competencia</b> al dictarse (personalidad jurídica, <b>indulto</b>).</li>
+      <li><b>Art. 61:</b> no procede si (a) declara o crea derechos adquiridos legítimamente, (b) la ley fijó otra forma de extinción, (c) su regulación legal lo impide.</li>
+    </ul>
+    <p class="src">págs. 29–32</p>
+  </div>
+  <div class="par">
+    <h2>Invalidación</h2>
+    <p>Retiro por <b>ilegalidad</b> del acto; «auténtica nulidad declarada por la Administración» (Valdivia). Fundamento: arts. 6 y 7 CPR y 2 Ley 18.575. Es un <b>deber</b>, no una facultad (art. 64 a) Estatuto Administrativo).</p>
+    <ul>
+      <li><b>Art. 53 LBPA:</b> <b>audiencia previa</b> del interesado y plazo: el texto dice <b>2 años</b> desde la comunicación; <b>la ley vigente dice 1 año</b> desde la notificación o publicación.</li>
+      <li><b>Contraloría:</b> invalida la autoridad que dictó el acto; el plazo es de <b>caducidad</b> (no se suspende ni interrumpe); límites: buena fe, confianza legítima, derechos adquiridos.</li>
+    </ul>
+    <p class="src">pág. 32</p>
+  </div>
+  <div class="par">
+    <h2>Caducidad</h2>
+    <p>Para Silva, una <b>sanción</b> por haber dejado de cumplir las obligaciones que el acto imponía. Lo esencial es el <b>incumplimiento imputable</b> del beneficiario (de una licencia o concesión), ligado o no a un plazo.</p>
+    <p class="src">págs. 32–33</p>
+  </div>
+  <div class="par">
+    <h2>Decaimiento</h2>
+    <p>Desaparecen los <b>supuestos de hecho</b> (terrenos concesionados invadidos por las aguas) o <b>de derecho</b> (se deroga la ley que lo sustentaba). Algunos lo limitan a actos generales y permanentes.</p>
+    <div class="imp"><b>Silva lo rechaza:</b> «espejismo», «falacia jurídica», teoría irrelevante. El texto concluye que no es un modo de extinción: se subsume en la <b>revocación</b> por pérdida sobreviniente del mérito o en la <b>invalidación</b> por ilegalidad sobrevenida.</div>
+    <p class="src">págs. 33–34</p>
+  </div>
+</section>
+
+<!-- PREGUNTAS -->
+<section id="preg" role="tabpanel" hidden>
+  <div class="band cielo"><p>Preguntas <b>nuevas</b> con el estilo del profesor. Responde todas y toca <b>Corregir</b> al final: verás la respuesta, la explicación y la página del texto.</p></div>
+  <div class="qbar">
+    <select id="qfiltro" aria-label="Filtrar"><option value="todo">Todas</option><option value="sm">Solo alternativas</option><option value="vf">Solo V/F</option></select>
+    <button data-q="mezclar">Mezclar</button>
+    <span class="score"></span>
+  </div>
+  <div id="quizbox" style="display:flex;flex-direction:column;gap:10px"></div>
+  <div class="qfoot"><button class="pri" data-q="corregir">Corregir</button><button data-q="reiniciar">Borrar respuestas</button><span class="score"></span></div>
+</section>
+
+<footer>Fuente: Silva Cimma, <i>Derecho Administrativo chileno y comparado</i>, caps. IV y V (texto del curso, 34 págs.). Artículos de la Ley 19.880 verificados contra su texto vigente en LeyChile.</footer>
+</div>
+<script>
+window.PREG=[
+{t:'sm',q:'Según el texto, ¿quién formuló la clasificación entre actos de autoridad y actos de gestión, y sobre qué supuesto descansaba?',
+ o:['Zanobini; sobre la distinción entre declaraciones de voluntad y de juicio.','Laferrière; sobre la supuesta doble personalidad del Estado, de Derecho Público y de Derecho Privado.','Bocanegra; sobre la separación entre concesión y autorización.','Soto Kloss; sobre la Nulidad de Derecho Público.'],a:1,
+ e:'La clasificación más antigua la formuló el francés Laferrière, que presidió el Consejo de Estado, y partía de que el Estado tendría una doble personalidad.',s:'Silva Cimma, pág. 1'},
+{t:'sm',q:'En relación a la siguiente descripción, determine qué clase de acto corresponde según la clasificación tradicional: <i>«El Estado celebra con un particular un contrato de obra pública, ciñéndose a las disposiciones de Derecho Público»</i>.',
+ o:['Acto de autoridad.','Acto de gestión privada.','Acto de gestión pública.','Acto político o de gobierno.'],a:2,
+ e:'Los actos de gestión pública son contratos en el ámbito patrimonial regidos por el Derecho Público, con dos voluntades: el contrato administrativo, como el de obra pública. La gestión privada se rige por el Derecho común (compraventa, arriendo).',s:'pág. 2'},
+{t:'sm',q:'Según el texto, ¿por qué la clasificación entre actos de autoridad y actos de gestión ha quedado obsoleta?',
+ o:['Porque la Ley N° 19.880 la derogó expresamente en su artículo 3°.','Porque el Estado tiene siempre personalidad de Derecho Público y, además, no es una verdadera clasificación del acto, sino una ordenación civilista entre actos unilaterales y bilaterales.','Porque los actos de gestión quedaron sometidos a toma de razón obligatoria.','Porque la Corte Suprema declaró jurídicamente inexistentes los actos de gestión.'],a:1,
+ e:'Dos razones de fondo: no existe doble personalidad del Estado, y la distinción no clasifica actos administrativos, sino que separa actos unilaterales (actos administrativos) de bilaterales (contratos públicos). Además perdió trascendencia práctica.',s:'págs. 2–3'},
+{t:'sm',q:'Según el texto, ¿cuáles son las razones por las que, en el Derecho chileno, la distinción entre actos políticos o de gobierno y actos propiamente administrativos carece de importancia?',
+ o:['Porque los actos políticos solo los dicta el Congreso Nacional.','Porque ambos emanan del mismo órgano, se someten al mismo control preventivo de legalidad y constitucionalidad, y su control jurisdiccional cabe en los tribunales ordinarios desde 1989.','Porque los actos políticos solo generan responsabilidad internacional del Estado.','Porque la Constitución de 1925 prohibió reclamar contra los actos políticos.'],a:1,
+ e:'Silva la llama una doctrina arcaica: mismo órgano (el Presidente), mismo control preventivo y mismo control jurisdiccional. Por seguridad jurídica, se impone identificarlos.',s:'pág. 5'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué clase de acto corresponde según el criterio que Silva prefirió: <i>«El jefe de un servicio aplica la medida disciplinaria de censura a un funcionario de su repartición»</i>.',
+ o:['Acto externo, porque recae sobre una persona distinta de la Administración.','Acto interno, porque dice relación con las normas estatutarias del personal.','Acto político o de gobierno.','Acto de gestión privada.'],a:1,
+ e:'Silva prefirió entender como interno el acto relativo a la Administración y a las normas estatutarias del personal (ingreso, deberes, carrera, responsabilidad, cese). Las medidas disciplinarias, nombramientos y beneficios funcionarios son internos.',s:'pág. 6'},
+{t:'sm',q:'Respecto de los actos internos, ¿qué régimen de obediencia reconoce la legislación chilena según el texto?',
+ o:['Obediencia absoluta: el funcionario cumple sin poder objetar.','Obediencia reflexiva: el funcionario puede representar el acto que estima ilegal, pero debe cumplirlo si el superior insiste, y la responsabilidad se traslada a este.','Obediencia judicial: el funcionario debe pedir autorización al juez antes de cumplir.','Obediencia facultativa: el funcionario decide libremente si cumple.'],a:1,
+ e:'Es la obediencia reflexiva de los arts. 61 letra f) y 62 del Estatuto Administrativo (Ley 18.834). Si cumple sin representar, responde; si representa y el superior insiste, la responsabilidad pasa al superior.',s:'pág. 7'},
+{t:'sm',q:'Según el texto, ¿qué prerrogativa permite a la Administración hacer cumplir coactivamente un acto externo sin necesidad de recurrir al Poder Judicial?',
+ o:['La potestad jerárquica.','La ejecutoriedad.','La toma de razón.','La obediencia reflexiva.'],a:1,
+ e:'Frente a terceros no hay potestad jerárquica, pero sí potestad coactiva: la ejecutoriedad, derivada de la presunción de validez y de la ejecutividad (imperio) del art. 3 LBPA.',s:'pág. 7'},
+{t:'sm',q:'En relación al siguiente antecedente, determine qué clase de acto corresponde según su incidencia en el patrimonio del destinatario: <i>«La autoridad marítima otorga a una empresa una concesión para ocupar un sector de playa de mar»</i>.',
+ o:['Acto declarativo de derechos.','Acto constitutivo de derechos.','Acto de mero trámite.','Acto de efecto mixto.'],a:1,
+ e:'Crea un derecho que antes no existía: es constitutivo (Caldera). El texto da como ejemplos típicos la concesión de playa, la beca y la pensión de jubilación. Sus efectos rigen hacia el futuro, desde su notificación.',s:'págs. 12 y 17'},
+{t:'sm',q:'Valore cuál es la importancia práctica de distinguir entre actos de efectos favorables y actos de efectos desfavorables, según el texto:',
+ o:['La autoridad que los debe firmar.','En los desfavorables la motivación es más imperativa y no pueden tener efecto retroactivo.','Los favorables no requieren notificación.','Los desfavorables son siempre actos de trámite.'],a:1,
+ e:'El art. 11 LBPA exige expresar hechos y fundamentos de derecho en los actos que afectan derechos, y el art. 52 LBPA solo admite retroactividad cuando el acto produce consecuencias favorables y no lesiona derechos de terceros.',s:'págs. 9–10; arts. 11 y 52 LBPA'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué clase de acto corresponde: <i>«La autoridad autoriza la instalación de una planta industrial en una caleta; los operadores turísticos ven afectado el paisaje del que vivían»</i>.',
+ o:['Acto de efecto mixto.','Acto con efectos frente a terceros.','Acto interno.','Acto de denegación.'],a:1,
+ e:'Es favorable para el destinatario y desfavorable para terceros: el supuesto característico de la doctrina alemana (Maurer). El efecto mixto, en cambio, recae sobre el mismo destinatario.',s:'pág. 10'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué clase de acto corresponde: <i>«Al resolver la reclamación, la autoridad confirma la infracción, pero rebaja la multa de 100 a 40 UTM»</i>.',
+ o:['Acto con efectos frente a terceros.','Acto de efecto mixto.','Acto de concesión.','Acto declarativo de derechos.'],a:1,
+ e:'Para un mismo destinatario produce a la vez efectos perjudiciales (mantiene la sanción) y favorables (la rebaja). Es el ejemplo del texto.',s:'pág. 10'},
+{t:'sm',q:'Según el texto, ¿qué diferencia se ha solido señalar entre los actos de autorización y los de aprobación?',
+ o:['La aprobación es siempre previa y la autorización siempre posterior.','La autorización es previa a la ejecución del acto, mientras que la aprobación es a posteriori, aunque el legislador suele emplear ambos vocablos indistintamente.','Son idénticos, pues la LBPA los define juntos en su artículo 3°.','La aprobación solo puede otorgarla el Poder Judicial.'],a:1,
+ e:'Esa es la distinción tradicional, con la advertencia del texto: el legislador los usa indistintamente, así que hay que mirar los antecedentes de cada caso. El ejemplo de aprobación es la toma de razón.',s:'pág. 11'},
+{t:'sm',q:'En relación a la siguiente descripción, determine qué clase de acto corresponde según su contenido: <i>«Decreto del Presidente de la República que nombra a una persona en un cargo de planta»</i>.',
+ o:['Acto de dispensa.','Acto de admisión.','Acto punitivo.','Acto de aprobación.'],a:1,
+ e:'La admisión incorpora a una persona a un régimen preestablecido; el nombramiento la admite al régimen estatutario de la Administración.',s:'pág. 11'},
+{t:'sm',q:'Según el texto, ¿qué requisito condiciona siempre a los actos de dispensa?',
+ o:['Que los dicte el Contralor General de la República.','Que exista una norma expresa que faculte a la Administración para dictarlos.','Que se publiquen en el Diario Oficial.','Que sean de efectos generales.'],a:1,
+ e:'Por el principio de legalidad, levantar excepcionalmente una prohibición en un caso concreto exige norma expresa que lo faculte.',s:'pág. 11'},
+{t:'sm',q:'Según el texto, ¿cómo resolvió la Ley N° 19.880 el problema de la negativa de la Administración que no se materializa en una resolución formal?',
+ o:['Con el recurso extraordinario de revisión del art. 60.','Con el silencio positivo y el silencio negativo de los arts. 64 y 65.','Con el trámite de toma de razón.','Con la invalidación del art. 53.'],a:1,
+ e:'Antes, esa negativa quedaba fuera de control. La LBPA lo resolvió con carácter general, «quizás no de la mejor manera», mediante el silencio administrativo.',s:'pág. 12; arts. 64 y 65 LBPA'},
+{t:'sm',q:'Según López, citado en el texto, ¿cuál es la relevancia de distinguir entre actos simples y actos complejos?',
+ o:['Los actos complejos no son impugnables.','En los actos complejos, el vicio en la declaración de uno de los órganos afecta la validez de todo el acto.','Los actos simples requieren siempre acuerdo del concejo municipal.','Los actos complejos son siempre discrecionales.'],a:1,
+ e:'El acto complejo reúne voluntades concomitantes de varios órganos, como el alcalde y el concejo (art. 65 LOC de Municipalidades). Si una de ellas está viciada, cae el conjunto.',s:'págs. 12–13'},
+{t:'sm',q:'En relación al siguiente antecedente, determine qué clase de acto corresponde según la naturaleza de la potestad ejercida: <i>«La municipalidad otorga licencia de conducir a quien acreditó todos los requisitos legales»</i>.',
+ o:['Acto discrecional.','Acto reglado.','Acto complejo.','Acto de dispensa.'],a:1,
+ e:'En el acto reglado la Administración solo constata el cumplimiento de requisitos (Bocanegra); no pondera conveniencia ni oportunidad. La licencia de conducir es el ejemplo del texto; el discrecional típico es la concesión de bienes nacionales de uso público.',s:'pág. 13'},
+{t:'sm',q:'Según el texto, ¿qué significa el imperativo «Refréndese» de un acto terminal?',
+ o:['Numerar y fechar el acto en el servicio de origen.','Verificar la existencia de recursos para atender el gasto que el acto dispone.','Someter el acto al examen de legalidad de la Contraloría.','Insertar el acto en el Diario Oficial.'],a:1,
+ e:'Se cumple en los actos que ordenan gastos con cargo al ítem de variables o a leyes especiales. Numerar y fechar es «Anótese»; el examen de Contraloría es «Tómese razón»; el Diario Oficial es «Publíquese».',s:'pág. 14'},
+{t:'sm',q:'En relación con el imperativo «Regístrese», ¿quién lleva el registro de los funcionarios públicos y quién el de los bienes raíces fiscales?',
+ o:['Ambos registros los lleva el Ministerio de Hacienda.','El de funcionarios, la Contraloría General de la República; el de bienes raíces fiscales, el Ministerio de Bienes Nacionales.','El de funcionarios, el Servicio Civil; el de bienes, el Conservador de Bienes Raíces.','Ambos los lleva la Tesorería General de la República.'],a:1,
+ e:'Por eso el primero lo maneja una entidad autónoma y externa a la Administración activa, y el segundo queda dentro de ella.',s:'pág. 15'},
+{t:'sm',q:'Según el texto, el imperativo «Comuníquese» presenta dos acepciones. ¿Cuáles son?',
+ o:['Notificar al interesado un acto de efectos particulares, e informar a Tesorería de un acto que importa un egreso fiscal.','Publicar en el Diario Oficial y en el sitio electrónico del servicio.','Remitir el acto a la Contraloría y al Congreso Nacional.','Notificar por carta certificada y por correo electrónico.'],a:0,
+ e:'Ejemplo del texto: el decreto que ordena pagar un desahucio fiscal lleva «comuníquese a la Tesorería General de la República».',s:'pág. 15'},
+{t:'sm',q:'Según el artículo 60 de la Ley N° 19.880, comentado en el texto, ¿qué recurso procede en contra de los actos administrativos firmes?',
+ o:['El recurso de reposición.','El recurso jerárquico.','El recurso extraordinario de revisión.','El recurso de protección.'],a:2,
+ e:'Procede ante el superior jerárquico o, en su defecto, ante quien dictó el acto, por causales tasadas: falta de emplazamiento, error de hecho manifiesto o documentos esenciales, delito declarado por sentencia, o documentos o testimonios falsos.',s:'pág. 16; art. 60 LBPA'},
+{t:'sm',q:'¿Qué crítica formula el texto a la figura del acto firme en el Derecho chileno?',
+ o:['Que ninguna norma chilena la menciona.','Que el criterio de la firmeza no aporta, porque los plazos para recurrir administrativamente son breves y los de las acciones judiciales, extensos.','Que solo se aplica a los reglamentos.','Que la Contraloría la declaró inconstitucional.'],a:1,
+ e:'Si la firmeza real se alcanza al agotarse la vía judicial, quedará pendiente por mucho tiempo. El texto la considera una figura discutible que requiere más estudio.',s:'pág. 17'},
+{t:'sm',q:'En relación al siguiente antecedente, determine desde cuándo rigen sus efectos según el texto: <i>«Decreto que concede una jubilación a un funcionario»</i>.',
+ o:['Desde su publicación en el Diario Oficial.','Retroactivamente, desde la fecha del cese de funciones, porque se limita a reconocer un derecho.','Desde la toma de razón del decreto.','Solo hacia el futuro, porque crea un derecho nuevo.'],a:1,
+ e:'Es un acto favorable que reconoce un derecho (declarativo), así que sus efectos se retrotraen a cuando se cumplieron los requisitos: el cese de funciones.',s:'págs. 17–18'},
+{t:'sm',q:'Según el texto, ¿en qué casos la doctrina francesa admite la inexistencia jurídica del acto administrativo?',
+ o:['Cuando el acto es discrecional.','Cuando el acto no deja huella material alguna, o cuando emana de un funcionario subalterno que carece de potestad para dictarlo.','Cuando el acto no fue publicado en el Diario Oficial.','Cuando el acto se dictó fuera del plazo legal.'],a:1,
+ e:'Son los dos grupos de Waline: el decreto sin firma, fecha ni antecedente alguno, y el certificado del Registro Civil otorgado por un carabinero. Son infracciones «monstruosas» y excepcionales.',s:'págs. 20–21'},
+{t:'sm',q:'Según la doctrina italiana expuesta en el texto, ¿cuáles son las tres categorías tradicionales de anulabilidad?',
+ o:['Error, fuerza y dolo.','Violación de ley, incompetencia y exceso de poder.','Exceso de poder, abuso de poder y desviación de poder.','Falta de motivación, defecto de forma y extemporaneidad.'],a:1,
+ e:'Están recogidas en el art. 21-octies de la Ley italiana 241/1990. Ojo con la alternativa de «exceso, abuso y desviación de poder»: esos son los vicios de competencia de la doctrina francesa.',s:'págs. 22–23'},
+{t:'sm',q:'Según la tesis de Bernaschina, ¿cuándo es nulo de nulidad absoluta un acto administrativo y cuándo es anulable?',
+ o:['Es nulo si es desfavorable y anulable si es favorable.','Es nulo cuando la autoridad actúa fuera de su competencia y anulable cuando actúa dentro de ella, pero fuera de la ley.','Es nulo si no tuvo toma de razón y anulable si no se publicó.','Es nulo si lo declara la Contraloría y anulable si lo declara el juez.'],a:1,
+ e:'Para Bernaschina, la nulidad absoluta por incompetencia opera de pleno derecho; la ilegalidad o anulabilidad requiere declaración jurisdiccional. Se apoyó en el art. 1462 CC y en los arts. 4, 23 y 75 de la CPR de 1925.',s:'págs. 24–25'},
+{t:'sm',q:'Según el texto, ¿cuál es el argumento central por el que Silva discrepó de la tesis de Bernaschina?',
+ o:['Que permitir a cualquier persona, en especial a un funcionario, evaluar por sí misma la ilegitimidad del acto y dejar de cumplirlo consagraría la anarquía dentro de la Administración.','Que Bernaschina negaba la existencia de los actos administrativos.','Que Bernaschina sostenía que la nulidad prescribe en cuatro años.','Que Bernaschina aplicaba las normas del Código Penal.'],a:0,
+ e:'La presunción de validez ampara a todos los actos de la Administración. Silva agrega que Bernaschina olvida el carácter orgánico-formal del acto, no indica la causal y no considera el exceso, el abuso y la desviación de poder.',s:'pág. 25'},
+{t:'sm',q:'Según el texto, ¿qué sostiene Pierry respecto de las demandas de nulidad que se presentan acompañadas de una acción indemnizatoria?',
+ o:['Que deben declararse inadmisibles.','Que son en realidad acciones de plena jurisdicción: el juez acoge o rechaza según el mérito y, si la acción indemnizatoria está prescrita, debe rechazarla.','Que la nulidad es imprescriptible y arrastra consigo a la indemnización.','Que corresponde conocerlas a la Contraloría General de la República.'],a:1,
+ e:'Para Pierry no es necesario que el juez tome partido por una teoría de nulidad. Esta doctrina ha tenido acogida en la Corte Suprema desde inicios del siglo XXI.',s:'pág. 27'},
+{t:'sm',q:'Según el texto, conforme a la Ley N° 19.880, ¿cuál es la regla general entre los vicios de forma o de procedimiento?',
+ o:['Los vicios invalidantes.','Los vicios subsanables.','Los vicios no esenciales, que no afectan la validez del acto.','Los vicios de nulidad de pleno derecho.'],a:2,
+ e:'Del art. 13 se extraen tres categorías: invalidantes (requisito esencial y perjuicio), subsanables (art. 13 inciso final y art. 56) y no esenciales, que son la regla general.',s:'pág. 28; art. 13 LBPA'},
+{t:'sm',q:'En relación a la siguiente narración, valore la actuación de la autoridad según el texto: <i>«A los pocos días de nombrar en un cargo de planta a una persona que cumplía todos los requisitos legales, la autoridad revoca el nombramiento por estimar que resultó ser un mal funcionario»</i>.',
+ o:['Es válida, porque los actos administrativos son esencialmente revocables.','No procede, porque el nombramiento es un acto reglado y, por regla general, irrevocable por mérito; para alejarlo se requiere otro acto con nuevos elementos, como una medida disciplinaria.','Procede, siempre que el acto revocatorio tome razón.','Procede, porque el nombramiento es un acto de efectos generales.'],a:1,
+ e:'Es el ejemplo del texto. Además, la revocabilidad no es la regla general, porque no es de la esencia del acto.',s:'págs. 30–31'},
+{t:'sm',q:'Según el texto, ¿cuál de los siguientes actos es irrevocable porque, al emitirse, se agota la competencia de la autoridad?',
+ o:['Un reglamento.','El decreto supremo que concede un indulto.','Una autorización de uso precario.','Un llamado a licitación pública.'],a:1,
+ e:'Lo mismo ocurre con el que concede personalidad jurídica (sin perjuicio de su «cancelación», por norma constitucional expresa). El reglamento, en cambio, es revocable sin limitaciones.',s:'pág. 31'},
+{t:'sm',q:'Según la jurisprudencia de la Contraloría citada en el texto, el plazo para ejercer la potestad invalidatoria es:',
+ o:['De prescripción, por lo que puede interrumpirse.','De caducidad, por lo que no admite suspensión ni interrupción.','Inexistente: la Administración puede invalidar en cualquier momento.','Judicial, fijado por el juez en cada caso.'],a:1,
+ e:'La Contraloría también ha dicho que es competente para invalidar la autoridad que dictó el acto original, y que la buena fe, la confianza legítima y los derechos adquiridos limitan esta potestad.',s:'pág. 32'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué figura extintiva corresponde: <i>«La autoridad deja sin efecto una concesión acuícola porque el concesionario no inició la operación dentro del plazo ni pagó las patentes que el acto le imponía»</i>.',
+ o:['Revocación.','Invalidación.','Declaración de caducidad.','Decaimiento.'],a:2,
+ e:'La caducidad es la sanción por incumplir las obligaciones que el acto imponía; su dato esencial es el incumplimiento imputable al beneficiario. La revocación es por mérito y la invalidación por ilegalidad.',s:'págs. 32–33'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué figura suele invocarse según el texto: <i>«Los terrenos sobre los cuales se otorgó una concesión quedan definitivamente cubiertos por las aguas»</i>.',
+ o:['Caducidad.','Decaimiento.','Invalidación.','Acto firme.'],a:1,
+ e:'Es el ejemplo de Silva de desaparición de los supuestos de hecho. Pero Silva rechaza el decaimiento («falacia jurídica») y el texto concluye que se subsume en la revocación o en la invalidación.',s:'pág. 33'},
+{t:'vf',q:'Según el texto, el Estado tiene una doble personalidad: de Derecho Público cuando actúa como autoridad y de Derecho Privado cuando gestiona su patrimonio.',a:false,
+ e:'Falso. La doble personalidad está obsoleta: el Estado es siempre persona de Derecho Público; lo que cambia es el régimen que aplica.',s:'págs. 2–3'},
+{t:'vf',q:'Según el texto, en Chile los actos políticos o de gobierno quedan siempre al margen de todo control jurisdiccional.',a:false,
+ e:'Falso. Esa era la doctrina francesa original. Para Silva es arcaica: en Chile su control cabe en los tribunales ordinarios desde 1989.',s:'pág. 5'},
+{t:'vf',q:'Para la doctrina española, el reglamento no es un acto administrativo general, porque es una norma jurídica y no un acto de aplicación de normas.',a:true,
+ e:'Verdadero. Es el criterio sustancial y ordinamentalista. En Chile, en cambio, los arts. 37 bis y 48 LBPA dejan poco margen para excluirlo.',s:'págs. 8–9'},
+{t:'vf',q:'Todo acto administrativo de efectos favorables es un acto creador de derechos.',a:false,
+ e:'Falso. Los favorables son un género que engloba varias especies: no todo acto favorable crea derechos.',s:'pág. 9'},
+{t:'vf',q:'Según el texto, los actos de autorización pueden asimilarse a los actos declarativos de derechos.',a:false,
+ e:'Falso. El texto dice expresamente que no pueden asimilarse, por la diferencia de efectos temporales entre declarativos y constitutivos.',s:'pág. 12'},
+{t:'vf',q:'De acuerdo con la Ley N° 19.880, los actos de mero trámite son impugnables solo cuando determinan la imposibilidad de continuar el procedimiento o producen indefensión.',a:true,
+ e:'Verdadero. Art. 15 inciso 2° LBPA. Los terminales, en cambio, son la regla general de impugnabilidad.',s:'págs. 15–16; art. 15 LBPA'},
+{t:'vf',q:'Según el texto, la toma de razón es un requisito de validez que se aplica siempre y sin excepciones a todos los actos administrativos.',a:false,
+ e:'Falso. Es una regla general, no absoluta: el Contralor puede eximir actos no esenciales, sujetos a controles de reemplazo a posteriori.',s:'pág. 15'},
+{t:'vf',q:'Según el texto, la inexistencia jurídica debe aplicarse ampliamente en el Derecho Administrativo, como el grado máximo de invalidez.',a:false,
+ e:'Falso. Debe aplicarse con mucha cautela, para casos burdos o de gabinete. Rebollo considera de dudoso acierto admitirla como grado máximo de invalidez.',s:'pág. 19'},
+{t:'vf',q:'Para la doctrina española, la nulidad de pleno derecho es imprescriptible, produce efectos ex tunc, puede apreciarse de oficio y es insubsanable.',a:true,
+ e:'Verdadero. Son exactamente sus cuatro rasgos; la anulabilidad es su reverso.',s:'pág. 23'},
+{t:'vf',q:'Silva sostuvo que en el Derecho chileno es fundamental distinguir entre nulidad y anulabilidad del acto administrativo.',a:false,
+ e:'Falso. Para Silva la distinción es «absolutamente intrascendente», porque no configuran vicios distintos.',s:'pág. 26'},
+{t:'vf',q:'Para Silva, la nulidad del acto administrativo opera de pleno derecho, sin necesidad de declaración jurisdiccional.',a:false,
+ e:'Falso. Silva sostuvo que la nulidad debe ser consecuencia de una declaración jurisdiccional. La operación de pleno derecho la sostenían Bernaschina (para la incompetencia) y Soto Kloss.',s:'pág. 26'},
+{t:'vf',q:'Para Soto Kloss, la Nulidad de Derecho Público tiene su origen más remoto en el artículo 160 de la Constitución de 1833 y puede ser declarada de oficio por el juez.',a:true,
+ e:'Verdadero. Además es ipso iure, insanable, imprescriptible y de efectos retroactivos.',s:'pág. 27'},
+{t:'vf',q:'Según el texto, la revocabilidad es la regla general de los actos administrativos, porque es de su esencia.',a:false,
+ e:'Falso. Silva concluyó que la revocabilidad no es de la esencia del acto, porque puede faltar sin que este degenere.',s:'pág. 30'},
+{t:'vf',q:'Los actos de efectos generales, como un reglamento, pueden revocarse sin limitaciones, porque no confieren directamente derechos a los administrados.',a:true,
+ e:'Verdadero. Distinto es el acto particular que concede o declara derechos, amparado por el derecho de propiedad.',s:'pág. 31'},
+{t:'vf',q:'Según el texto, la invalidación es una facultad que la autoridad puede o no ejercer, aunque haya comprobado que su acto es ilegítimo.',a:false,
+ e:'Falso. Es un deber jurídico vinculante (art. 64 letra a) del Estatuto Administrativo), cuyo incumplimiento compromete la responsabilidad del infractor.',s:'pág. 32'},
+{t:'vf',q:'Según el texto, la vía judicial contempla únicamente la nulidad o anulación del acto por razones de ilegalidad congénita.',a:true,
+ e:'Verdadero. La revocación, la invalidación, la caducidad y los recursos son vías administrativas.',s:'pág. 29'},
+{t:'vf',q:'Silva aceptó el decaimiento como una modalidad especial de extinción del acto administrativo.',a:false,
+ e:'Falso. Lo llamó un espejismo y una falacia jurídica. Sus casos se subsumen en la revocación o la invalidación.',s:'pág. 33'},
+{t:'vf',q:'Según la Ley N° 19.880 vigente, la autoridad puede invalidar sus actos contrarios a derecho dentro de dos años desde su notificación o publicación.',a:false,
+ e:'Falso según la ley vigente: el art. 53 dice un año. El texto de Silva Cimma todavía dice dos años desde la comunicación. Si la pregunta dice «según el texto», la respuesta cambia.',s:'pág. 32; art. 53 LBPA vigente'}
+];
+
+</script>
+
+<script>
+/* Pestañas + motor de preguntas (alternativas y V/F). Datos en window.PREG = [{t:'sm'|'vf', q, o:[...], a:indice|true|false, e, s, k}] */
+(function(){
+  var KEY=document.body.dataset.key||'admin';
+  function sget(k){try{return JSON.parse(localStorage.getItem(KEY+'-'+k))}catch(e){return null}}
+  function sset(k,v){try{localStorage.setItem(KEY+'-'+k,JSON.stringify(v))}catch(e){}}
+
+  // Pestañas
+  var tabs=[].slice.call(document.querySelectorAll('nav [role=tab]'));
+  function show(id){
+    tabs.forEach(function(t){var on=t.dataset.s===id;t.setAttribute('aria-selected',on);var p=document.getElementById(t.dataset.s);if(p)p.hidden=!on;});
+    sset('tab',id);
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.s);window.scrollTo({top:0});});});
+  var s=sget('tab'); if(s&&document.getElementById(s)&&tabs.length)show(s);
+
+  // Preguntas
+  var box=document.getElementById('quizbox'); if(!box||!window.PREG)return;
+  var L='abcdefgh';
+  // Baraja las alternativas con semilla fija por pregunta, para que la correcta no caiga siempre en la misma letra
+  function rng(seed){return function(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;};}
+  var data=window.PREG.map(function(x,i){
+    x.id=i;
+    if(x.t==='sm'&&!x.fijo){
+      var r=rng(i*7919+(document.body.dataset.key||'').length*31+17), idx=x.o.map(function(_,j){return j;});
+      for(var k=idx.length-1;k>0;k--){var j=Math.floor(r()*(k+1));var t=idx[k];idx[k]=idx[j];idx[j]=t;}
+      x.o=idx.map(function(j){return x.o[j];}); x.a=idx.indexOf(x.a);
+    }
+    return x;
+  });
+  var resp=sget('resp')||{}; var corregido=false;
+  var filtro=document.getElementById('qfiltro');
+  function lista(){
+    var f=filtro?filtro.value:'todo';
+    var orden=sget('orden');
+    var arr=data.filter(function(x){return f==='todo'||x.t===f||(x.k&&x.k===f);});
+    if(orden){var pos={};orden.forEach(function(id,i){pos[id]=i});arr.sort(function(a,b){return (pos[a.id]??a.id)-(pos[b.id]??b.id)});}
+    return arr;
+  }
+  function esc(t){return t}
+  function render(){
+    var arr=lista(); box.innerHTML='';
+    arr.forEach(function(x,n){
+      var d=document.createElement('div'); d.className='q'+(corregido?' done':'');
+      var head='<div class="qn"><span>'+(n+1)+' · '+(x.t==='vf'?'Verdadero o falso':'Selección múltiple')+'</span>'+(x.k?'<span>· '+x.k+'</span>':'')+'</div>';
+      var body='<p class="qt">'+esc(x.q)+'</p>';
+      var nm='q'+x.id;
+      if(x.t==='vf'){
+        body+='<div class="vf">'+[['V',true],['F',false]].map(function(p){
+          var ch=resp[x.id]===p[1]?' checked':'';
+          var cls=corregido?(p[1]===x.a?' class="ok"':(resp[x.id]===p[1]?' class="bad"':'')):'';
+          return '<label'+cls+'><input type="radio" name="'+nm+'" value="'+p[1]+'"'+ch+(corregido?' disabled':'')+'><span><b>'+p[0]+'</b></span></label>';
+        }).join('')+'</div>';
+      }else{
+        body+=x.o.map(function(o,j){
+          var ch=resp[x.id]===j?' checked':'';
+          var cls=corregido?(j===x.a?' class="ok"':(resp[x.id]===j?' class="bad"':'')):'';
+          return '<label'+cls+'><input type="radio" name="'+nm+'" value="'+j+'"'+ch+(corregido?' disabled':'')+'><span>'+L[j]+') '+o+'</span></label>';
+        }).join('');
+      }
+      var ok=resp[x.id]===x.a;
+      var correcta=x.t==='vf'?(x.a?'Verdadero':'Falso'):(L[x.a]+')');
+      body+='<div class="exp"><span class="res '+(ok?'ok':'bad')+'">'+(resp[x.id]===undefined?'Sin responder':(ok?'Correcta':'Incorrecta'))+' · respuesta: '+correcta+'</span><p>'+x.e+'</p>'+(x.s?'<p class="src">'+x.s+'</p>':'')+'</div>';
+      d.innerHTML=head+body; box.appendChild(d);
+      [].forEach.call(d.querySelectorAll('input'),function(inp){inp.addEventListener('change',function(){
+        resp[x.id]=x.t==='vf'?(inp.value==='true'):parseInt(inp.value,10); sset('resp',resp); cuenta();
+      });});
+    });
+    cuenta();
+  }
+  function cuenta(){
+    var arr=lista(), r=0, b=0;
+    arr.forEach(function(x){if(resp[x.id]!==undefined){r++; if(resp[x.id]===x.a)b++;}});
+    [].forEach.call(document.querySelectorAll('.score'),function(el){
+      el.textContent=corregido?('Puntaje: '+b+' de '+arr.length+(arr.length?' ('+Math.round(100*b/arr.length)+' %)':'')):('Respondidas: '+r+' de '+arr.length);
+    });
+  }
+  function corregir(){corregido=true;render();window.scrollTo({top:box.offsetTop-80});}
+  function reiniciar(){resp={};sset('resp',resp);corregido=false;render();window.scrollTo({top:0});}
+  function mezclar(){var ids=data.map(function(x){return x.id});for(var i=ids.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=ids[i];ids[i]=ids[j];ids[j]=t;}sset('orden',ids);resp={};sset('resp',resp);corregido=false;render();}
+  [].forEach.call(document.querySelectorAll('[data-q=corregir]'),function(b){b.addEventListener('click',corregir)});
+  [].forEach.call(document.querySelectorAll('[data-q=reiniciar]'),function(b){b.addEventListener('click',reiniciar)});
+  [].forEach.call(document.querySelectorAll('[data-q=mezclar]'),function(b){b.addEventListener('click',mezclar)});
+  if(filtro)filtro.addEventListener('change',function(){corregido=false;render();});
+  render();
+})();
+
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}</script>
+</body></html>
