@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Última unidad</title>
+<meta name="theme-color" content="#f6f3ec">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Archivo+Narrow:wght@500;700&display=swap">
+<style>/* Layout: una columna para celular; bandas de color suaves por tema, como un folleto plegable */
+:root{
+  --bg:#f6f3ec; --fg:#24221f; --muted:#5f5a52; --line:#d9d2c4; --card:#fffdf8;
+  --mostaza:#e7d38f; --salvia:#bfd8b8; --cielo:#b9d3e4; --rosa:#ebc0c6; --durazno:#efc9a4;
+  --tinta:#3b5a73; --ok:#3f7a52; --warn:#9a5b1f;
+  --f-display:"Archivo",system-ui,sans-serif; --f-body:"Archivo",system-ui,sans-serif; --f-label:"Archivo Narrow","Arial Narrow",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1c1b19; --fg:#ece7dd; --muted:#b3ab9d; --line:#3b3833; --card:#252321;
+  --mostaza:#5c5232; --salvia:#3d5240; --cielo:#34495a; --rosa:#5a3c42; --durazno:#5c4632;
+  --tinta:#a9c6dc; --ok:#8fc29f; --warn:#e2ad78; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1c1b19; --fg:#ece7dd; --muted:#b3ab9d; --line:#3b3833; --card:#252321;
+  --mostaza:#5c5232; --salvia:#3d5240; --cielo:#34495a; --rosa:#5a3c42; --durazno:#5c4632;
+  --tinta:#a9c6dc; --ok:#8fc29f; --warn:#e2ad78; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header h1{font-family:var(--f-display);font-weight:800;font-size:1.9rem;line-height:1.05;letter-spacing:-.02em;margin:.4rem 0 .3rem;text-wrap:balance}
+header p{margin:0;color:var(--muted)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:10px 0;margin:10px 0 4px;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;font-family:var(--f-label);font-weight:700;font-size:.85rem;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 12px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+nav button:focus-visible,summary:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+section{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.band{border-radius:14px;padding:14px 16px;min-width:0}
+.mostaza{background:var(--mostaza)}.salvia{background:var(--salvia)}.cielo{background:var(--cielo)}.rosa{background:var(--rosa)}.durazno{background:var(--durazno)}
+h2{font-family:var(--f-display);font-weight:800;font-size:1.25rem;line-height:1.15;margin:0 0 6px;text-wrap:balance}
+h3{font-family:var(--f-label);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--muted)}
+.band h3{color:inherit;opacity:.75}
+p{margin:0}
+ul{margin:4px 0 0;padding-left:1.1em}
+li{margin:2px 0}
+.def{font-size:1rem;border-left:3px solid currentColor;padding-left:10px;margin-top:6px}
+.src{font-family:var(--f-label);font-size:.8rem;color:var(--muted);margin-top:6px}
+.band .src{color:inherit;opacity:.7}
+.star{display:inline-block;font-family:var(--f-label);font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;background:var(--fg);color:var(--bg);border-radius:6px;padding:1px 7px;margin-left:4px;vertical-align:2px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.split{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.tag{font-family:var(--f-label);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase}
+.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0}
+summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:600;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--f-label);font-weight:700;color:var(--muted)}
+details[open] summary::after{content:"–"}
+details .in{padding:0 14px 12px;color:var(--fg)}
+.flow{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:8px 0}
+.step b.n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--fg);color:var(--bg);font-family:var(--f-label);font-weight:700}
+.arrow{margin-left:13px;width:2px;height:10px;background:var(--line)}
+.cmp{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:96px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:8px}
+.row:first-child{border-top:0;padding-top:0}
+.k{font-family:var(--f-label);font-weight:700}
+.num{font-variant-numeric:tabular-nums;font-weight:800}
+.quiz details summary{font-weight:600}
+.quiz .in{border-top:1px dashed var(--line);padding-top:10px}
+footer{color:var(--muted);font-size:.85rem;margin-top:18px}
+@media (prefers-reduced-motion:no-preference){section{animation:fade .18s ease-out}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+
+/* Agregados: barra de inicio, preguntas interactivas, avisos de discrepancia */
+.home{display:inline-block;font-family:var(--f-label);font-weight:700;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta);text-decoration:none;margin-top:4px}
+.ojo{border:1.5px dashed var(--warn);border-radius:12px;padding:10px 12px;background:var(--card)}
+.ojo b.t{color:var(--warn);font-family:var(--f-label);letter-spacing:.04em;text-transform:uppercase;font-size:.8rem;display:block;margin-bottom:2px}
+.pares{display:grid;gap:10px}
+.par{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.par h2{font-size:1.05rem;margin-bottom:8px}
+.par .split{margin-top:4px}
+.par .lado{border-left:3px solid var(--line);padding-left:9px;min-width:0}
+.par .lado .tag{display:block;margin-bottom:2px}
+.par .imp{margin-top:8px;font-size:.92rem;border-top:1px dashed var(--line);padding-top:7px}
+.qbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 2px}
+.qbar button,.qfoot button{font-family:var(--f-label);font-weight:700;font-size:.85rem;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--fg);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;cursor:pointer}
+.qbar button.pri,.qfoot button.pri{background:var(--fg);color:var(--bg)}
+.qbar select{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 10px}
+.score{font-family:var(--f-display);font-weight:800;font-size:1.2rem}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.q .qn{font-family:var(--f-label);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.q .qt{margin:4px 0 8px;font-weight:600}
+.q .qt i{font-weight:500}
+.q label{display:grid;grid-template-columns:22px 1fr;gap:6px;align-items:start;padding:6px 6px;border-radius:8px;cursor:pointer}
+.q label:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.q input{margin-top:4px;accent-color:var(--fg)}
+.q label.ok{background:color-mix(in srgb,var(--ok) 18%,transparent)}
+.q label.bad{background:color-mix(in srgb,var(--warn) 20%,transparent);text-decoration:line-through}
+.q .exp{display:none;margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;font-size:.93rem}
+.q.done .exp{display:block}
+.q .res{font-family:var(--f-label);font-weight:700;text-transform:uppercase;font-size:.78rem;letter-spacing:.05em}
+.q .res.ok{color:var(--ok)}.q .res.bad{color:var(--warn)}
+.q .vf{display:flex;gap:10px}
+.q .vf label{grid-template-columns:22px auto;border:1px solid var(--line);padding:6px 14px}
+.qfoot{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.menu{display:grid;gap:10px}
+.menu a{display:block;text-decoration:none;color:inherit;border-radius:14px;padding:14px 16px}
+.menu a b{font-family:var(--f-display);font-weight:800;font-size:1.15rem;display:block}
+.menu a span{color:inherit;opacity:.8;font-size:.92rem}
+.hora{font-family:var(--f-label);font-weight:700;font-variant-numeric:tabular-nums}
+.check{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;padding:6px 0;border-top:1px solid var(--line)}
+.check:first-of-type{border-top:0}
+.check input{margin-top:4px;accent-color:var(--fg);width:18px;height:18px}
+</style>
+</head><body data-key="contratos">
+<div class="wrap">
+<header>
+  <a class="home" href="./">← Inicio</a>
+  <h3>Derecho Administrativo · torpedo</h3>
+  <h1>Última unidad: contratos públicos, recursos y falta de servicio</h1>
+  <p>Toca una pestaña. Lo marcado con <span class="star">prueba</span> fue señalado como pregunta de prueba.</p>
+</header>
+
+<nav role="tablist" aria-label="Temas">
+  <button role="tab" id="t-contrato" aria-selected="true" data-s="contrato">Contrato</button>
+  <button role="tab" id="t-prerrog" aria-selected="false" data-s="prerrog">Prerrogativas</button>
+  <button role="tab" id="t-tipos" aria-selected="false" data-s="tipos">Tipos</button>
+  <button role="tab" id="t-proc" aria-selected="false" data-s="proc">Procedimiento</button>
+  <button role="tab" id="t-sist" aria-selected="false" data-s="sist">Sistemas</button>
+  <button role="tab" id="t-garant" aria-selected="false" data-s="garant">Garantías</button>
+  <button role="tab" id="t-resp" aria-selected="false" data-s="resp">Falta de servicio</button>
+  <button role="tab" id="t-quiz" aria-selected="false" data-s="quiz">Repaso rápido</button>
+  <button role="tab" id="t-rec" aria-selected="false" data-s="rec">Recursos</button>
+  <button role="tab" id="t-preg" aria-selected="false" data-s="preg">Práctica</button>
+</nav>
+
+<!-- CONTRATO -->
+<section id="contrato" role="tabpanel" aria-labelledby="t-contrato">
+  <div class="band mostaza">
+    <h3>Definición</h3>
+    <p class="def">Negocio jurídico <b>bilateral</b> entre una Administración (o ente dependiente) y un <b>privado</b> (contratista), de régimen en mayor o menor medida de <b>Derecho Administrativo</b>, cuya finalidad es satisfacer directa o indirectamente un <b>interés general</b>.</p>
+    <p class="src">Rodríguez, 2016, p. 271</p>
+  </div>
+  <div class="box">
+    <h2>4 características <span class="star">pp</span></h2>
+    <ul>
+      <li><b>Bilateral, distinta del acto administrativo.</b> El acto administrativo es siempre unilateral; por eso el contrato no es acto administrativo (Bermúdez, Pierry, Caldera, Dromi).</li>
+      <li><b>Partes:</b> siempre un órgano de la Administración y un particular. Fines distintos: bien común / bien privado (Barra y Celis).</li>
+      <li><b>Finalidad:</b> interés general, directo o indirecto.</li>
+      <li><b>Régimen mixto</b> según la etapa.</li>
+    </ul>
+  </div>
+  <div class="split">
+    <div class="box"><span class="tag ok">Finalista · directa</span><p>El privado <b>presta el servicio público</b> en lugar del Estado.</p><p class="src">Carretera, agua potable, aeropuerto</p></div>
+    <div class="box"><span class="tag warn">Medial · indirecta</span><p>El privado <b>da los medios</b> para que el Estado funcione.</p><p class="src">Gendarmería compra ropa, comida, luz</p></div>
+  </div>
+  <div class="band cielo">
+    <h3>Régimen por etapas</h3>
+    <div class="cmp">
+      <div class="row"><span class="k">Elaboración</span><span>Rige casi por completo el Derecho público.</span></div>
+      <div class="row"><span class="k">Celebración y ejecución</span><span>Entra más el Derecho privado, salvo las prerrogativas exorbitantes, donde vuelve el público.</span></div>
+    </div>
+    <p class="src">Rodríguez, 2016, p. 273</p>
+  </div>
+  <details><summary>Entre dos organismos públicos, ¿es contrato público?</summary><div class="in">No: es un <b>convenio administrativo</b>. La Ley 19.886 los excluye (art. 3 letra b). Que «en el fondo es un comodato» es comentario de clase.</div></details>
+</section>
+
+<!-- PRERROGATIVAS -->
+<section id="prerrog" role="tabpanel" aria-labelledby="t-prerrog" hidden>
+  <div class="band rosa">
+    <h3>Idea</h3>
+    <p>El Estado no deja de ser Estado al contratar: conserva su posición «supra ordenadora» (Soto Kloss). Se expresa en las <b>cláusulas exorbitantes</b>, que generan desigualdad entre las partes y se aplican <b>sin juez</b>.</p>
+  </div>
+  <div class="box"><h2>¿Dónde constan? <span class="star">prueba</span></h2><p>En las <b>bases de la licitación</b>. El particular las acepta al conocerlas y ofertar: conoce los riesgos.</p></div>
+  <div class="split">
+    <div class="box"><span class="tag ok">Particular NO responsable · hay indemnización</span>
+      <ul><li><b>Ius variandi:</b> modificar el objeto (carretera → túnel).</li><li><b>Potestad extintiva:</b> término anticipado por interés público (5 años → 1).</li></ul></div>
+    <div class="box"><span class="tag warn">Particular SÍ responsable · sin indemnización</span>
+      <ul><li><b>Sancionadora</b> (correctiva): multas tipo cláusula penal, ipso iure.</li><li><b>Sustitución</b> del contratista por mora.</li></ul></div>
+  </div>
+  <p class="src">Moraga, 2011, p. 73. Clave: las dos primeras operan por interés público sin incumplimiento; las dos últimas, por incumplimiento.</p>
+</section>
+
+<!-- TIPOS -->
+<section id="tipos" role="tabpanel" aria-labelledby="t-tipos" hidden>
+  <div class="band salvia">
+    <h2>Concesión</h2>
+    <p>El Estado <b>otorga derechos</b> al privado; este da una retribución.</p>
+    <ul>
+      <li><b>Bienes de uso público:</b> estacionamiento subterráneo. Solo uso, no dominio.</li>
+      <li><b>Actividad de servicio público:</b> recolección de basura municipal.</li>
+      <li><b>Obra pública:</b> el Estado sigue obligado, pero concede la explotación y mantención (autopista con peaje).</li>
+    </ul>
+  </div>
+  <div class="band durazno">
+    <h2>Adquisición</h2>
+    <p>Al revés: el <b>privado le entrega algo</b> al Estado.</p>
+    <ul>
+      <li><b>Obra pública:</b> construir; inmuebles.</li>
+      <li><b>Suministro:</b> compra o arriendo de bienes muebles (art. 2 Ley 19.886).</li>
+      <li><b>Servicios:</b> «arriendo de servicios», mantención de computadores, contabilidad.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PROCEDIMIENTO -->
+<section id="proc" role="tabpanel" aria-labelledby="t-proc" hidden>
+  <div class="box">
+    <h2>3 etapas</h2>
+    <p class="src">No hay código general: Leyes 19.886, 19.880 y 18.575. Esquema doctrinal.</p>
+    <div class="flow">
+      <div class="step"><b class="n">1</b><div><b>Elaboración de la voluntad de contratar</b> <span class="star">la más importante</span><br>Se fijan las reglas en las <b>bases</b> (pueden traer cláusulas exorbitantes). Actos de mero trámite: bases → ofertas.</div></div>
+      <div class="arrow"></div>
+      <div class="step"><b class="n">2</b><div><b>Adjudicación</b><br>Acto administrativo terminal que selecciona al oferente; se dicta y comunica.</div></div>
+      <div class="arrow"></div>
+      <div class="step"><b class="n">3</b><div><b>Celebración y perfección</b><br>Aceptación del proponente y formalidades (notificación o escritura pública, según la norma).</div></div>
+    </div>
+  </div>
+  <div class="band cielo"><p>No confundir el <b>procedimiento</b> (contiene actos administrativos, unilaterales) con el <b>contrato</b> que luego se perfecciona (bilateral). Moraga, 2011, p. 132.</p></div>
+</section>
+
+<!-- SISTEMAS -->
+<section id="sist" role="tabpanel" aria-labelledby="t-sist" hidden>
+  <div class="band mostaza"><h3>Art. 9 Ley 18.575</h3><p>Contratos previa <b>propuesta pública</b>; principios de <b>libre concurrencia</b> e <b>igualdad ante las bases</b>. Licitación privada por resolución fundada, salvo trato directo.</p></div>
+  <div class="box cmp">
+    <div class="row"><span class="k">Pública</span><span><b>Regla general.</b> Cualquiera oferta; llamado en Mercado Público. Más certeza (art. 7 a).</span></div>
+    <div class="row"><span class="k">Privada <span class="star">prueba</span></span><span>Procede si la pública <b>fracasó</b> (sin interesados u ofertas inadmisibles), por <b>resolución fundada</b>; se invita a algunos (en clase: mínimo 3). Arts. 7 b y 8.</span></div>
+    <div class="row"><span class="k">Trato directo</span><span>Excepcionalísimo, <b>un solo proveedor</b>. Más riesgoso para la probidad; Contraloría lo objeta.</span></div>
+  </div>
+  <div class="box"><h3>Orden legal (art. 8)</h3><p>Pública → si fracasa, privada → si fracasa, trato directo.</p></div>
+  <details><summary>Requisitos del trato directo</summary><div class="in"><ul><li>Causal legal (Ley 19.886 y reglamento).</li><li>Resolución fundada del jefe de servicio.</li><li>Publicar resolución, contrato y orden de compra en 24 h.</li><li>Prohibido fragmentar compras.</li><li>Práctica: al menos 3 cotizaciones.</li></ul></div></details>
+  <details><summary>Causales del trato directo (art. 8 bis)</summary><div class="in"><ul>
+    <li><b>Proveedor único</b>, sin sustituto razonable. Sobre 1.000 UTM: publicar antes la intención (5 días hábiles).</li>
+    <li><b>Sin interesados</b> tras licitación pública y privada.</li>
+    <li><b>Emergencia, urgencia o imprevisto</b>, por resolución fundada. Sismos y catástrofes tienen ley especial. Calificarla mal: multa de 10 a 100 UTM.</li>
+    <li><b>Confidencialidad</b> o seguridad nacional, determinada por ley.</li>
+    <li><b>Seguridad y confianza</b> por experiencia comprobada: solo sobre 1.000 UTM (ej.: armas).</li>
+    <li>Reglamento: compras menores a 30 UTM de alto impacto social; naturaleza de la negociación.</li></ul></div></details>
+  <details><summary>Procedimientos especiales (art. 7 d)</summary><div class="in"><ul><li>Compra ágil</li><li>Compra por cotización</li><li><b>Convenio marco:</b> licitación que fija condiciones por un tiempo, para todo Chile, en Mercado Público. Revisarlo antes de licitar («Temu estatal»).</li><li>Contratos para la innovación</li><li>Diálogo competitivo de innovación</li><li>Subasta inversa electrónica</li><li>Otros del reglamento</li></ul></div></details>
+</section>
+
+<!-- GARANTIAS -->
+<section id="garant" role="tabpanel" aria-labelledby="t-garant" hidden>
+  <div class="split">
+    <div class="band salvia"><h3>Fiel cumplimiento</h3><p class="num" style="font-size:1.6rem">5 %</p><p>del precio final neto, en contrataciones <b>sobre 1.000 UTM</b>. Bajo ese monto, puede exigirse fundadamente.</p></div>
+    <div class="band rosa"><h3>Seriedad de la oferta</h3><p class="num" style="font-size:1.6rem">≤ 3 %</p><p>Excepcional, por interés público, en licitaciones <b>sobre 5.000 UTM</b>. Asegura mantener la oferta hasta firmar.</p></div>
+  </div>
+  <div class="box"><p><b>Ojo:</b> el apunte las mezcla. La ley (art. 11 Ley 19.886) las separa. Truco: <b>cumplimiento 1.000 y 5 %</b>; <b>seriedad 5.000 y 3 %</b>. Con cargo a ellas se cobran multas. Se dan con boleta de garantía o vale vista.</p></div>
+  <div class="band cielo"><h2>Toma de razón</h2><p>Contraloría revisa bases, la resolución que adjudica y los actos posteriores. Es excepcional (según el material, sobre <b>8.000 UTM</b>) y es <b>solo legalidad y constitucionalidad</b>: no revisa el mérito.</p></div>
+</section>
+
+<!-- RESPONSABILIDAD -->
+<section id="resp" role="tabpanel" aria-labelledby="t-resp" hidden>
+  <div class="band mostaza"><h3>Concepto</h3><p>Responsabilidad civil extracontractual del Estado: cuándo los organismos públicos deben <b>indemnizar los perjuicios</b> que causan a terceros.</p><p class="src">Valdivia, 2018, p. 427</p></div>
+  <details open><summary>Fuentes (5)</summary><div class="in"><ul>
+    <li><b>CPR 38 inc. 2:</b> cualquier lesionado por la Administración reclama ante los tribunales; sin perjuicio de la responsabilidad del funcionario.</li>
+    <li><b>Ley 18.575 art. 4:</b> el Estado responde por los daños de sus órganos en el ejercicio de sus funciones.</li>
+    <li><b>Ley 18.575 art. 42:</b> responsabilidad por <b>falta de servicio</b>; repetición contra el funcionario por falta personal. No rige para todos los organismos.</li>
+    <li><b>Ley 18.695 art. 152:</b> municipalidades, principalmente por falta de servicio.</li>
+    <li><b>Ley 19.966 art. 38:</b> salud pública; el particular prueba la falta de servicio; mediación previa ante el CDE; repetición por imprudencia temeraria o dolo, prescribe en 2 años.</li></ul></div></details>
+  <div class="box"><h2>Falta de servicio</h2><p>El servicio <b>no se presta, se presta mal o se presta tarde</b>. Es una <b>falta anónima</b>: no exige identificar al funcionario.</p><p class="src">Cordero Vega, 2017, p. 140 · ej.: calle sin pavimentar, con hoyos o arreglada después del accidente</p></div>
+  <div class="split">
+    <div class="box"><span class="tag ok">Falta de servicio</span><p>Culpa del <b>organismo</b>: mala organización o funcionamiento deficiente.</p></div>
+    <div class="box"><span class="tag warn">Falta personal</span><p>Culpa civil del <b>funcionario</b>, solo suya. El Estado puede repetir.</p></div>
+  </div>
+  <div class="band durazno"><h2>Requisitos</h2><ul><li>Daño.</li><li>Relación de causalidad.</li><li>Hecho imputable a la Administración: la falta de servicio.</li></ul><p style="margin-top:6px"><b>Culpa del servicio:</b> no actuó debiendo hacerlo, o actuó deficiente o tardíamente.</p></div>
+  <div class="box"><p><b>Ojo:</b> no es responsabilidad objetiva pura. Es una culpa <b>objetivada</b>, medida contra un estándar de servicio (Valdivia, 2018, p. 437). Se demanda al organismo con personalidad jurídica: la Fuerza Aérea es un órgano, se demanda al Fisco.</p></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" role="tabpanel" aria-labelledby="t-quiz" hidden class="quiz">
+  <p class="src">Toca cada pregunta para ver la respuesta.</p>
+  <details><summary>¿Por qué el contrato no es acto administrativo?</summary><div class="in">Porque el acto administrativo es esencialmente unilateral y el contrato es bilateral.</div></details>
+  <details><summary>¿Dónde se consagran las prerrogativas?</summary><div class="in">En las bases de la licitación; el particular las acepta al ofertar.</div></details>
+  <details><summary>¿Cuándo procede la licitación privada?</summary><div class="in">Si la pública fracasó (sin interesados u ofertas inadmisibles), previa resolución fundada. Arts. 7 b y 8 Ley 19.886.</div></details>
+  <details><summary>¿Qué prerrogativas se indemnizan?</summary><div class="in">El ius variandi y el término anticipado (interés público, sin incumplimiento). La sanción y la sustitución por mora no.</div></details>
+  <details><summary>Finalista vs. medial</summary><div class="in">Finalista: el privado presta el servicio público. Medial: le da medios al Estado.</div></details>
+  <details><summary>Garantía de fiel cumplimiento</summary><div class="in">5 % del precio final neto, sobre 1.000 UTM. La de seriedad: excepcional, sobre 5.000 UTM, hasta 3 %.</div></details>
+  <details><summary>¿Qué revisa la toma de razón?</summary><div class="in">Solo legalidad y constitucionalidad (bases, adjudicación, actos posteriores). No el mérito.</div></details>
+  <details><summary>¿Qué es la falta de servicio?</summary><div class="in">No prestar, prestar mal o prestar tarde el servicio. Falta anónima.</div></details>
+  <details><summary>Requisitos de la responsabilidad</summary><div class="in">Daño, causalidad y hecho imputable a la Administración (falta de servicio).</div></details>
+  <details><summary>Orden de los sistemas</summary><div class="in">Licitación pública → privada → trato directo (art. 8 Ley 19.886).</div></details>
+</section>
+
+
+<!-- RECURSOS -->
+<section id="rec" role="tabpanel" hidden>
+  <div class="band rosa"><h3>Lo que fallaste en la 3.ª evaluación</h3><ul>
+    <li><b>Plazos (art. 59 LBPA):</b> reposición <b>5 días</b> y jerárquico <b>5 días</b>. No 3.</li>
+    <li><b>Actos de trámite (art. 15):</b> no todo acto es impugnable; los de trámite, solo si impiden continuar o causan indefensión.</li>
+    <li><b>Trato directo:</b> «servicios profesionales o técnicos» <b>no</b> es causal. Sí lo son la emergencia, el proveedor único y la confidencialidad.</li>
+    <li><b>Fin de la elaboración:</b> la cierra la <b>adjudicación</b>. La publicación de las bases la inicia.</li>
+  </ul></div>
+  <div class="box"><h2>Art. 59 LBPA en cuatro reglas</h2><ul>
+    <li><b>Reposición:</b> ante el mismo órgano, 5 días. Puede ir con <b>jerárquico en subsidio</b>: si se rechaza, el expediente sube solo.</li>
+    <li><b>Jerárquico solo:</b> ante el superior, 5 días desde la notificación.</li>
+    <li><b>No hay jerárquico</b> contra actos del Presidente, ministros, alcaldes y jefes superiores de servicios descentralizados: la <b>reposición agota la vía</b>.</li>
+    <li>Se resuelven en <b>30 días</b> como máximo; si hay jerárquico, se oye antes al órgano recurrido; quien acoge puede <b>modificar, reemplazar o dejar sin efecto</b> el acto.</li>
+  </ul><p class="src">Art. 59 LBPA, verificado contra su texto vigente. Art. 15: quien acoge puede dictar el acto de reemplazo. Art. 41: no se puede agravar la situación inicial del interesado.</p></div>
+</section>
+
+<!-- PRACTICA -->
+<section id="preg" role="tabpanel" hidden>
+  <div class="band cielo"><p>Preguntas <b>nuevas</b> al estilo del profesor. Responde todas y toca <b>Corregir</b> al final.</p></div>
+  <div class="qbar">
+    <select id="qfiltro" aria-label="Filtrar"><option value="todo">Todas</option><option value="sm">Solo alternativas</option><option value="vf">Solo V/F</option></select>
+    <button data-q="mezclar">Mezclar</button>
+    <span class="score"></span>
+  </div>
+  <div id="quizbox" style="display:flex;flex-direction:column;gap:10px"></div>
+  <div class="qfoot"><button class="pri" data-q="corregir">Corregir</button><button data-q="reiniciar">Borrar respuestas</button><span class="score"></span></div>
+</section>
+
+<footer>Verificado contra la Ley 19.886 (arts. 2, 3, 7, 8, 8 bis, 9 y 11) y la Ley 18.575 (arts. 4, 9 y 42). Las cifras de toma de razón y el número de invitados en la licitación privada son del material del curso.</footer>
+</div>
+
+
+<script>
+window.PREG=[
+{t:'sm',q:'En relación a la siguiente narración, determine qué clase de contrato público corresponde según su finalidad: <i>«Gendarmería de Chile contrata el suministro de alimentos y vestuario para los internos»</i>.',
+ o:['Finalista o directo.','Medial o indirecto.','Convenio administrativo.','Concesión de obra pública.'],a:1,
+ e:'El privado da al Estado los medios para que funcione. En el finalista, en cambio, el privado presta el servicio público en lugar del Estado (carretera, agua potable).',s:'Torpedo, Contrato'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué tipo de contrato corresponde: <i>«El Estado entrega a una sociedad la explotación y mantención de una autopista, que se financia con el cobro de peajes»</i>.',
+ o:['Adquisición de obra pública.','Concesión de obra pública.','Suministro.','Contrato de servicios.'],a:1,
+ e:'En la concesión el Estado otorga derechos al privado (aquí, explotar y mantener la obra) y este da una retribución. En la adquisición, el privado le entrega algo al Estado.',s:'Torpedo, Tipos'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué tipo de contrato corresponde: <i>«La Municipalidad de Viña del Mar entrega a una empresa la recolección de la basura domiciliaria de la comuna»</i>.',
+ o:['Concesión de bien nacional de uso público.','Concesión de actividad de servicio público.','Suministro.','Convenio marco.'],a:1,
+ e:'El Estado otorga al privado la prestación de una actividad de servicio público. La concesión de bienes de uso público, en cambio, solo da el uso (un estacionamiento subterráneo).',s:'Torpedo, Tipos'},
+{t:'sm',q:'Según el art. 2 de la Ley N° 19.886, ¿cómo se denomina el contrato que tiene por objeto la compra o el arriendo de bienes muebles?',
+ o:['Contrato de servicios.','Contrato de suministro.','Concesión de obra pública.','Convenio administrativo.'],a:1,
+ e:'Es una de las tres adquisiciones (obra pública, suministro y servicios). La mantención de computadores o la contabilidad son servicios.',s:'Torpedo, Tipos; art. 2 Ley 19.886'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué prerrogativa ejerce la Administración y sus consecuencias: <i>«Celebrado el contrato para construir una carretera, el Ministerio decide que, en un tramo, se construya un túnel»</i>.',
+ o:['Potestad sancionatoria; sin indemnización.','Ius variandi; el particular no es responsable y tiene derecho a indemnización.','Sustitución del contratista; sin indemnización.','Revocación del contrato; sin indemnización.'],a:1,
+ e:'El ius variandi modifica el objeto por interés público, sin incumplimiento del contratista. Por eso se indemniza.',s:'Torpedo, Prerrogativas (Moraga, 2011, p. 73)'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué prerrogativa ejerce la Administración: <i>«Por razones de interés público, el contrato pactado a cinco años se pone término al cumplirse el primer año, sin que el contratista haya incumplido»</i>.',
+ o:['Potestad extintiva o término anticipado, con derecho a indemnización.','Potestad sancionatoria.','Sustitución por mora.','Caducidad por incumplimiento.'],a:0,
+ e:'Opera por interés público, sin incumplimiento: el contratista no es responsable y se le indemniza.',s:'Torpedo, Prerrogativas'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué prerrogativa ejerce la Administración: <i>«Ante la mora del contratista, la Administración encarga la ejecución de las obras pendientes a otra empresa»</i>.',
+ o:['Ius variandi.','Término anticipado por interés público.','Sustitución del contratista.','Convalidación.'],a:2,
+ e:'La sustitución, como la potestad sancionatoria, opera por incumplimiento del particular. Por eso no hay indemnización.',s:'Torpedo, Prerrogativas'},
+{t:'sm',q:'Según el material, ¿cuál es la etapa más importante del procedimiento de contratación pública?',
+ o:['La adjudicación.','La elaboración de la voluntad de contratar.','La celebración y perfección del contrato.','La ejecución del contrato.'],a:1,
+ e:'En ella se fijan las reglas en las bases, que pueden contener cláusulas exorbitantes. Comprende actos de mero trámite, desde las bases hasta las ofertas.',s:'Torpedo, Procedimiento'},
+{t:'sm',q:'¿Qué régimen jurídico predomina en la etapa de elaboración del contrato público?',
+ o:['Casi por completo el Derecho privado.','Casi por completo el Derecho público.','Exclusivamente el Derecho comercial.','Ninguno: es una etapa material.'],a:1,
+ e:'En la celebración y ejecución entra más el Derecho privado, salvo las prerrogativas exorbitantes, donde vuelve el público.',s:'Torpedo, Contrato (Rodríguez, 2016, p. 273)'},
+{t:'sm',q:'Según el art. 9 de la Ley N° 18.575, ¿qué principios rigen los contratos de la Administración celebrados previa propuesta pública?',
+ o:['Libre concurrencia de los oferentes e igualdad ante las bases.','Gratuidad y celeridad.','Reserva y confidencialidad.','Jerarquía y desconcentración.'],a:0,
+ e:'La licitación privada procede por resolución fundada y el trato directo solo por excepción.',s:'Torpedo, Sistemas; art. 9 Ley 18.575'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué sistema de contratación procede: <i>«Se llamó a licitación pública para adquirir equipos clínicos, pero no se presentaron interesados»</i>.',
+ o:['Trato directo inmediato, sin más trámite.','Licitación privada, previa resolución fundada.','Convenio administrativo.','Nueva licitación pública obligatoria por tres veces.'],a:1,
+ e:'Si la pública fracasa (sin interesados u ofertas inadmisibles), procede la privada por resolución fundada (arts. 7 b y 8 Ley 19.886). El trato directo «sin interesados» exige que hayan fracasado la pública y la privada.',s:'Torpedo, Sistemas'},
+{t:'sm',q:'Cuando se invoca la causal de proveedor único para un trato directo por un monto superior a 1.000 UTM, ¿qué exige la ley según el material?',
+ o:['Nada adicional.','Publicar previamente la intención de contratar, durante 5 días hábiles.','Una licitación privada con al menos tres oferentes.','Autorización del Congreso.'],a:1,
+ e:'La causal exige que no haya un sustituto razonable. Sobre 1.000 UTM, debe publicarse antes la intención.',s:'Torpedo, Sistemas; art. 8 bis Ley 19.886'},
+{t:'sm',q:'Según el material, ¿qué sanción arriesga quien califica indebidamente una situación como emergencia, urgencia o imprevisto para contratar en forma directa?',
+ o:['Destitución inmediata.','Multa de 10 a 100 UTM.','Nulidad de derecho público del servicio.','Ninguna, por ser una facultad discrecional.'],a:1,
+ e:'La causal exige resolución fundada. Los sismos y catástrofes tienen ley especial.',s:'Torpedo, Sistemas'},
+{t:'sm',q:'Según el material, ¿cuál de los siguientes es un requisito del trato directo?',
+ o:['Publicar la resolución, el contrato y la orden de compra dentro de 24 horas.','Fragmentar la compra en montos menores.','Contar con la aprobación de la Corte Suprema.','Que el contrato sea siempre inferior a 30 UTM.'],a:0,
+ e:'Además: causal legal y resolución fundada del jefe de servicio. La fragmentación de compras está prohibida. En la práctica, se piden al menos tres cotizaciones.',s:'Torpedo, Sistemas'},
+{t:'sm',q:'¿Qué es el convenio marco, según el material?',
+ o:['La regla general de la contratación pública.','Un procedimiento especial: una licitación que fija condiciones por un tiempo, para todo Chile, en Mercado Público.','Un acuerdo entre dos organismos públicos.','Una forma de trato directo.'],a:1,
+ e:'Está entre los procedimientos especiales del art. 7 letra d). Por eso, antes de licitar, hay que revisar si existe un convenio marco para lo que se necesita.',s:'Torpedo, Sistemas'},
+{t:'sm',q:'Según el art. 11 de la Ley N° 19.886, ¿cuál es la garantía de fiel cumplimiento en las contrataciones superiores a 1.000 UTM?',
+ o:['3 % del precio final neto.','5 % del precio final neto.','10 % del precio final neto.','Ninguna: es siempre facultativa.'],a:1,
+ e:'Bajo ese monto puede exigirse fundadamente. Truco: cumplimiento, 1.000 UTM y 5 %; seriedad, 5.000 UTM y hasta 3 %.',s:'Torpedo, Garantías'},
+{t:'sm',q:'Según el material, ¿cuándo procede la garantía de seriedad de la oferta?',
+ o:['Siempre, en toda licitación.','Excepcionalmente, por interés público, en licitaciones superiores a 5.000 UTM, por hasta el 3 %.','Solo en el trato directo.','Solo en los convenios marco.'],a:1,
+ e:'Asegura que el oferente mantenga su oferta hasta firmar. Con cargo a las garantías se cobran multas.',s:'Torpedo, Garantías; art. 11 Ley 19.886'},
+{t:'sm',q:'¿Qué revisa la Contraloría en la toma de razón de los actos del procedimiento de contratación?',
+ o:['Solo el mérito y la conveniencia de la adjudicación.','Solo la legalidad y la constitucionalidad de las bases, la adjudicación y los actos posteriores; no el mérito.','La solvencia económica del contratista.','La ejecución material de las obras.'],a:1,
+ e:'Es excepcional: según el material, sobre 8.000 UTM.',s:'Torpedo, Garantías'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué figura corresponde: <i>«El Ministerio de Salud y una universidad estatal acuerdan que esta capacite a los funcionarios del ministerio»</i>.',
+ o:['Contrato público regido por la Ley N° 19.886.','Convenio administrativo, excluido de la Ley N° 19.886.','Concesión de servicio público.','Trato directo.'],a:1,
+ e:'Entre organismos públicos no hay contrato público: hay convenio administrativo. La Ley 19.886 los excluye (art. 3 letra b).',s:'Torpedo, Contrato'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué modalidad de falta de servicio corresponde: <i>«Un ciclista cae en un hoyo de la calzada; la municipalidad lo había detectado meses antes y lo reparó al día siguiente del accidente»</i>.',
+ o:['El servicio no se prestó.','El servicio se prestó tarde.','Falta personal del alcalde.','Caso fortuito.'],a:1,
+ e:'La falta de servicio ocurre cuando el servicio no se presta, se presta mal o se presta tarde (Cordero Vega). La reparación posterior al accidente es el ejemplo del material.',s:'Torpedo, Falta de servicio'},
+{t:'sm',q:'¿Qué significa que la falta de servicio sea una «falta anónima»?',
+ o:['Que no exige identificar al funcionario que causó el daño.','Que la demanda puede presentarse sin firma.','Que no requiere probar el daño.','Que solo procede contra organismos sin personalidad jurídica.'],a:0,
+ e:'Es culpa del organismo, por mala organización o funcionamiento deficiente. La falta personal, en cambio, es culpa del funcionario.',s:'Torpedo, Falta de servicio'},
+{t:'sm',q:'En relación a la siguiente narración, determine contra quién debe dirigirse la demanda: <i>«Un avión de la Fuerza Aérea de Chile daña una propiedad particular en un ejercicio»</i>.',
+ o:['Contra la Fuerza Aérea, como órgano autónomo.','Contra el Fisco, porque la Fuerza Aérea es un órgano sin personalidad jurídica propia.','Contra el piloto exclusivamente.','Contra el Ministerio de Defensa como persona jurídica.'],a:1,
+ e:'Se demanda al organismo con personalidad jurídica. La Fuerza Aérea es un órgano del Estado; se demanda al Fisco.',s:'Torpedo, Falta de servicio'},
+{t:'sm',q:'En materia de salud pública, según el art. 38 de la Ley N° 19.966, ¿qué trámite debe cumplirse antes de demandar?',
+ o:['Una mediación previa ante el Consejo de Defensa del Estado.','Un recurso jerárquico ante el ministro.','La toma de razón de la demanda.','Un sumario administrativo.'],a:0,
+ e:'Además, el particular debe probar la falta de servicio. El Estado puede repetir contra el funcionario por imprudencia temeraria o dolo, acción que prescribe en 2 años.',s:'Torpedo, Falta de servicio'},
+{t:'sm',q:'Según Valdivia, citado en el material, ¿cuál es la naturaleza de la responsabilidad por falta de servicio?',
+ o:['Responsabilidad objetiva pura.','Culpa objetivada, medida contra un estándar de servicio.','Responsabilidad penal del jefe de servicio.','Responsabilidad contractual.'],a:1,
+ e:'No basta el daño: hay que probar que el servicio funcionó por debajo del estándar exigible.',s:'Torpedo, Falta de servicio (Valdivia, 2018, p. 437)'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué ocurre según el art. 59 LBPA: <i>«El interesado interpone recurso de reposición, sin deducir jerárquico en subsidio. Rechazada la reposición, pretende que el expediente se eleve al superior»</i>.',
+ o:['El expediente se eleva automáticamente al superior.','No se eleva: el expediente sube al superior solo si junto con la reposición se interpuso subsidiariamente el recurso jerárquico.','Puede interponer jerárquico dentro de 30 días.','Debe ir a la Contraloría.'],a:1,
+ e:'Por eso la reposición con jerárquico en subsidio es la configuración más prudente: agota la vía administrativa con un solo escrito.',s:'Art. 59 LBPA'},
+{t:'sm',q:'Según el art. 59 LBPA, ¿qué plazo tiene la autoridad para resolver los recursos administrativos?',
+ o:['5 días.','10 días hábiles.','No superior a 30 días.','Un año.'],a:2,
+ e:'Si se dedujo jerárquico, quien lo resuelve debe oír previamente al órgano recurrido, que puede formular descargos.',s:'Art. 59 LBPA'},
+{t:'vf',q:'El contrato público es un acto administrativo de carácter bilateral.',a:false,
+ e:'Falso. El acto administrativo es siempre unilateral; el contrato es bilateral, y por eso no es acto administrativo (Bermúdez, Pierry, Caldera, Dromi).',s:'Torpedo, Contrato'},
+{t:'vf',q:'Las cláusulas exorbitantes se aplican por la Administración sin necesidad de recurrir al juez.',a:true,
+ e:'Verdadero. Expresan la posición supraordenadora del Estado (Soto Kloss) y generan desigualdad entre las partes.',s:'Torpedo, Prerrogativas'},
+{t:'vf',q:'En el ejercicio del ius variandi, el contratista no tiene derecho a indemnización.',a:false,
+ e:'Falso. El ius variandi y el término anticipado operan por interés público sin incumplimiento: se indemnizan. La sanción y la sustitución, no.',s:'Torpedo, Prerrogativas'},
+{t:'vf',q:'Aunque el contrato público es bilateral, su procedimiento de formación contiene actos administrativos unilaterales.',a:true,
+ e:'Verdadero. No hay que confundir el procedimiento (bases, adjudicación) con el contrato que luego se perfecciona (Moraga, 2011, p. 132).',s:'Torpedo, Procedimiento'},
+{t:'vf',q:'La licitación pública es la regla general de los sistemas de contratación pública en Chile.',a:true,
+ e:'Verdadero. Cualquiera puede ofertar; el llamado se hace en Mercado Público (art. 7 letra a Ley 19.886).',s:'Torpedo, Sistemas'},
+{t:'vf',q:'La garantía de seriedad de la oferta es obligatoria en toda licitación pública.',a:false,
+ e:'Falso. Es excepcional, por interés público, en licitaciones sobre 5.000 UTM y hasta el 3 %.',s:'Torpedo, Garantías'},
+{t:'vf',q:'La toma de razón de la adjudicación permite a la Contraloría revisar el mérito de la decisión.',a:false,
+ e:'Falso. Revisa solo legalidad y constitucionalidad.',s:'Torpedo, Garantías'},
+{t:'vf',q:'La concesión de un bien nacional de uso público transfiere su dominio al concesionario.',a:false,
+ e:'Falso. Solo otorga el uso, no el dominio (estacionamiento subterráneo).',s:'Torpedo, Tipos'},
+{t:'vf',q:'Para que proceda la responsabilidad por falta de servicio, debe identificarse al funcionario que causó el daño.',a:false,
+ e:'Falso. Es una falta anónima: basta acreditar el funcionamiento deficiente del organismo.',s:'Torpedo, Falta de servicio'},
+{t:'vf',q:'La responsabilidad por falta de servicio es una responsabilidad objetiva pura.',a:false,
+ e:'Falso. Es una culpa objetivada, medida contra un estándar de servicio (Valdivia).',s:'Torpedo, Falta de servicio'},
+{t:'vf',q:'El art. 42 de la Ley N° 18.575, que consagra la responsabilidad por falta de servicio, no rige para todos los organismos del Estado.',a:true,
+ e:'Verdadero, según el material. Las municipalidades tienen su propia norma (art. 152 Ley 18.695) y la salud pública la suya (art. 38 Ley 19.966).',s:'Torpedo, Falta de servicio'},
+{t:'vf',q:'Según la LBPA, tanto el recurso de reposición como el jerárquico se interponen dentro de 5 días.',a:true,
+ e:'Verdadero. Art. 59. En la 3.ª evaluación se preguntó como «3 días para la reposición»: falso.',s:'Art. 59 LBPA'},
+{t:'vf',q:'No procede el recurso jerárquico contra los actos de los alcaldes.',a:true,
+ e:'Verdadero. Tampoco contra los del Presidente, los ministros y los jefes superiores de servicios descentralizados: ahí la reposición agota la vía administrativa.',s:'Art. 59 LBPA'},
+{t:'vf',q:'La autoridad que acoge un recurso interpuesto contra un acto administrativo puede dictar por sí misma el acto de reemplazo.',a:true,
+ e:'Verdadero. Art. 15 inciso final LBPA; el art. 59 agrega que puede modificar, reemplazar o dejar sin efecto el acto impugnado.',s:'Arts. 15 y 59 LBPA'},
+{t:'vf',q:'Los actos de mero trámite del procedimiento de licitación son siempre impugnables por los oferentes.',a:false,
+ e:'Falso. Solo cuando determinen la imposibilidad de continuar el procedimiento o produzcan indefensión (art. 15 LBPA).',s:'Art. 15 LBPA'}
+];
+
+</script>
+
+<script>
+/* Pestañas + motor de preguntas (alternativas y V/F). Datos en window.PREG = [{t:'sm'|'vf', q, o:[...], a:indice|true|false, e, s, k}] */
+(function(){
+  var KEY=document.body.dataset.key||'admin';
+  function sget(k){try{return JSON.parse(localStorage.getItem(KEY+'-'+k))}catch(e){return null}}
+  function sset(k,v){try{localStorage.setItem(KEY+'-'+k,JSON.stringify(v))}catch(e){}}
+
+  // Pestañas
+  var tabs=[].slice.call(document.querySelectorAll('nav [role=tab]'));
+  function show(id){
+    tabs.forEach(function(t){var on=t.dataset.s===id;t.setAttribute('aria-selected',on);var p=document.getElementById(t.dataset.s);if(p)p.hidden=!on;});
+    sset('tab',id);
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.s);window.scrollTo({top:0});});});
+  var s=sget('tab'); if(s&&document.getElementById(s)&&tabs.length)show(s);
+
+  // Preguntas
+  var box=document.getElementById('quizbox'); if(!box||!window.PREG)return;
+  var L='abcdefgh';
+  // Baraja las alternativas con semilla fija por pregunta, para que la correcta no caiga siempre en la misma letra
+  function rng(seed){return function(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;};}
+  var data=window.PREG.map(function(x,i){
+    x.id=i;
+    if(x.t==='sm'&&!x.fijo){
+      var r=rng(i*7919+(document.body.dataset.key||'').length*31+17), idx=x.o.map(function(_,j){return j;});
+      for(var k=idx.length-1;k>0;k--){var j=Math.floor(r()*(k+1));var t=idx[k];idx[k]=idx[j];idx[j]=t;}
+      x.o=idx.map(function(j){return x.o[j];}); x.a=idx.indexOf(x.a);
+    }
+    return x;
+  });
+  var resp=sget('resp')||{}; var corregido=false;
+  var filtro=document.getElementById('qfiltro');
+  function lista(){
+    var f=filtro?filtro.value:'todo';
+    var orden=sget('orden');
+    var arr=data.filter(function(x){return f==='todo'||x.t===f||(x.k&&x.k===f);});
+    if(orden){var pos={};orden.forEach(function(id,i){pos[id]=i});arr.sort(function(a,b){return (pos[a.id]??a.id)-(pos[b.id]??b.id)});}
+    return arr;
+  }
+  function esc(t){return t}
+  function render(){
+    var arr=lista(); box.innerHTML='';
+    arr.forEach(function(x,n){
+      var d=document.createElement('div'); d.className='q'+(corregido?' done':'');
+      var head='<div class="qn"><span>'+(n+1)+' · '+(x.t==='vf'?'Verdadero o falso':'Selección múltiple')+'</span>'+(x.k?'<span>· '+x.k+'</span>':'')+'</div>';
+      var body='<p class="qt">'+esc(x.q)+'</p>';
+      var nm='q'+x.id;
+      if(x.t==='vf'){
+        body+='<div class="vf">'+[['V',true],['F',false]].map(function(p){
+          var ch=resp[x.id]===p[1]?' checked':'';
+          var cls=corregido?(p[1]===x.a?' class="ok"':(resp[x.id]===p[1]?' class="bad"':'')):'';
+          return '<label'+cls+'><input type="radio" name="'+nm+'" value="'+p[1]+'"'+ch+(corregido?' disabled':'')+'><span><b>'+p[0]+'</b></span></label>';
+        }).join('')+'</div>';
+      }else{
+        body+=x.o.map(function(o,j){
+          var ch=resp[x.id]===j?' checked':'';
+          var cls=corregido?(j===x.a?' class="ok"':(resp[x.id]===j?' class="bad"':'')):'';
+          return '<label'+cls+'><input type="radio" name="'+nm+'" value="'+j+'"'+ch+(corregido?' disabled':'')+'><span>'+L[j]+') '+o+'</span></label>';
+        }).join('');
+      }
+      var ok=resp[x.id]===x.a;
+      var correcta=x.t==='vf'?(x.a?'Verdadero':'Falso'):(L[x.a]+')');
+      body+='<div class="exp"><span class="res '+(ok?'ok':'bad')+'">'+(resp[x.id]===undefined?'Sin responder':(ok?'Correcta':'Incorrecta'))+' · respuesta: '+correcta+'</span><p>'+x.e+'</p>'+(x.s?'<p class="src">'+x.s+'</p>':'')+'</div>';
+      d.innerHTML=head+body; box.appendChild(d);
+      [].forEach.call(d.querySelectorAll('input'),function(inp){inp.addEventListener('change',function(){
+        resp[x.id]=x.t==='vf'?(inp.value==='true'):parseInt(inp.value,10); sset('resp',resp); cuenta();
+      });});
+    });
+    cuenta();
+  }
+  function cuenta(){
+    var arr=lista(), r=0, b=0;
+    arr.forEach(function(x){if(resp[x.id]!==undefined){r++; if(resp[x.id]===x.a)b++;}});
+    [].forEach.call(document.querySelectorAll('.score'),function(el){
+      el.textContent=corregido?('Puntaje: '+b+' de '+arr.length+(arr.length?' ('+Math.round(100*b/arr.length)+' %)':'')):('Respondidas: '+r+' de '+arr.length);
+    });
+  }
+  function corregir(){corregido=true;render();window.scrollTo({top:box.offsetTop-80});}
+  function reiniciar(){resp={};sset('resp',resp);corregido=false;render();window.scrollTo({top:0});}
+  function mezclar(){var ids=data.map(function(x){return x.id});for(var i=ids.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=ids[i];ids[i]=ids[j];ids[j]=t;}sset('orden',ids);resp={};sset('resp',resp);corregido=false;render();}
+  [].forEach.call(document.querySelectorAll('[data-q=corregir]'),function(b){b.addEventListener('click',corregir)});
+  [].forEach.call(document.querySelectorAll('[data-q=reiniciar]'),function(b){b.addEventListener('click',reiniciar)});
+  [].forEach.call(document.querySelectorAll('[data-q=mezclar]'),function(b){b.addEventListener('click',mezclar)});
+  if(filtro)filtro.addEventListener('change',function(){corregido=false;render();});
+  render();
+})();
+
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}</script>
+</body></html>

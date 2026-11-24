@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Delgado · presunción de validez</title>
+<meta name="theme-color" content="#f6f3ec">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Archivo+Narrow:wght@500;700&display=swap">
+<style>/* Layout: una columna para celular; bandas de color suaves por tema, como un folleto plegable */
+:root{
+  --bg:#f6f3ec; --fg:#24221f; --muted:#5f5a52; --line:#d9d2c4; --card:#fffdf8;
+  --mostaza:#e7d38f; --salvia:#bfd8b8; --cielo:#b9d3e4; --rosa:#ebc0c6; --durazno:#efc9a4;
+  --tinta:#3b5a73; --ok:#3f7a52; --warn:#9a5b1f;
+  --f-display:"Archivo",system-ui,sans-serif; --f-body:"Archivo",system-ui,sans-serif; --f-label:"Archivo Narrow","Arial Narrow",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1c1b19; --fg:#ece7dd; --muted:#b3ab9d; --line:#3b3833; --card:#252321;
+  --mostaza:#5c5232; --salvia:#3d5240; --cielo:#34495a; --rosa:#5a3c42; --durazno:#5c4632;
+  --tinta:#a9c6dc; --ok:#8fc29f; --warn:#e2ad78; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1c1b19; --fg:#ece7dd; --muted:#b3ab9d; --line:#3b3833; --card:#252321;
+  --mostaza:#5c5232; --salvia:#3d5240; --cielo:#34495a; --rosa:#5a3c42; --durazno:#5c4632;
+  --tinta:#a9c6dc; --ok:#8fc29f; --warn:#e2ad78; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header h1{font-family:var(--f-display);font-weight:800;font-size:1.9rem;line-height:1.05;letter-spacing:-.02em;margin:.4rem 0 .3rem;text-wrap:balance}
+header p{margin:0;color:var(--muted)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:10px 0;margin:10px 0 4px;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;font-family:var(--f-label);font-weight:700;font-size:.85rem;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 12px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+nav button:focus-visible,summary:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+section{display:flex;flex-direction:column;gap:12px;padding-top:8px}
+.band{border-radius:14px;padding:14px 16px;min-width:0}
+.mostaza{background:var(--mostaza)}.salvia{background:var(--salvia)}.cielo{background:var(--cielo)}.rosa{background:var(--rosa)}.durazno{background:var(--durazno)}
+h2{font-family:var(--f-display);font-weight:800;font-size:1.25rem;line-height:1.15;margin:0 0 6px;text-wrap:balance}
+h3{font-family:var(--f-label);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin:0 0 4px;color:var(--muted)}
+.band h3{color:inherit;opacity:.75}
+p{margin:0}
+ul{margin:4px 0 0;padding-left:1.1em}
+li{margin:2px 0}
+.def{font-size:1rem;border-left:3px solid currentColor;padding-left:10px;margin-top:6px}
+.src{font-family:var(--f-label);font-size:.8rem;color:var(--muted);margin-top:6px}
+.band .src{color:inherit;opacity:.7}
+.star{display:inline-block;font-family:var(--f-label);font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;background:var(--fg);color:var(--bg);border-radius:6px;padding:1px 7px;margin-left:4px;vertical-align:2px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.split{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.tag{font-family:var(--f-label);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase}
+.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0}
+summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:600;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--f-label);font-weight:700;color:var(--muted)}
+details[open] summary::after{content:"–"}
+details .in{padding:0 14px 12px;color:var(--fg)}
+.flow{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:8px 0}
+.step b.n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--fg);color:var(--bg);font-family:var(--f-label);font-weight:700}
+.arrow{margin-left:13px;width:2px;height:10px;background:var(--line)}
+.cmp{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:96px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:8px}
+.row:first-child{border-top:0;padding-top:0}
+.k{font-family:var(--f-label);font-weight:700}
+.num{font-variant-numeric:tabular-nums;font-weight:800}
+.quiz details summary{font-weight:600}
+.quiz .in{border-top:1px dashed var(--line);padding-top:10px}
+footer{color:var(--muted);font-size:.85rem;margin-top:18px}
+@media (prefers-reduced-motion:no-preference){section{animation:fade .18s ease-out}@keyframes fade{from{opacity:.4}to{opacity:1}}}
+
+/* Agregados: barra de inicio, preguntas interactivas, avisos de discrepancia */
+.home{display:inline-block;font-family:var(--f-label);font-weight:700;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta);text-decoration:none;margin-top:4px}
+.ojo{border:1.5px dashed var(--warn);border-radius:12px;padding:10px 12px;background:var(--card)}
+.ojo b.t{color:var(--warn);font-family:var(--f-label);letter-spacing:.04em;text-transform:uppercase;font-size:.8rem;display:block;margin-bottom:2px}
+.pares{display:grid;gap:10px}
+.par{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.par h2{font-size:1.05rem;margin-bottom:8px}
+.par .split{margin-top:4px}
+.par .lado{border-left:3px solid var(--line);padding-left:9px;min-width:0}
+.par .lado .tag{display:block;margin-bottom:2px}
+.par .imp{margin-top:8px;font-size:.92rem;border-top:1px dashed var(--line);padding-top:7px}
+.qbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 2px}
+.qbar button,.qfoot button{font-family:var(--f-label);font-weight:700;font-size:.85rem;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--fg);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 14px;cursor:pointer}
+.qbar button.pri,.qfoot button.pri{background:var(--fg);color:var(--bg)}
+.qbar select{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 10px}
+.score{font-family:var(--f-display);font-weight:800;font-size:1.2rem}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.q .qn{font-family:var(--f-label);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.q .qt{margin:4px 0 8px;font-weight:600}
+.q .qt i{font-weight:500}
+.q label{display:grid;grid-template-columns:22px 1fr;gap:6px;align-items:start;padding:6px 6px;border-radius:8px;cursor:pointer}
+.q label:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.q input{margin-top:4px;accent-color:var(--fg)}
+.q label.ok{background:color-mix(in srgb,var(--ok) 18%,transparent)}
+.q label.bad{background:color-mix(in srgb,var(--warn) 20%,transparent);text-decoration:line-through}
+.q .exp{display:none;margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;font-size:.93rem}
+.q.done .exp{display:block}
+.q .res{font-family:var(--f-label);font-weight:700;text-transform:uppercase;font-size:.78rem;letter-spacing:.05em}
+.q .res.ok{color:var(--ok)}.q .res.bad{color:var(--warn)}
+.q .vf{display:flex;gap:10px}
+.q .vf label{grid-template-columns:22px auto;border:1px solid var(--line);padding:6px 14px}
+.qfoot{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.menu{display:grid;gap:10px}
+.menu a{display:block;text-decoration:none;color:inherit;border-radius:14px;padding:14px 16px}
+.menu a b{font-family:var(--f-display);font-weight:800;font-size:1.15rem;display:block}
+.menu a span{color:inherit;opacity:.8;font-size:.92rem}
+.hora{font-family:var(--f-label);font-weight:700;font-variant-numeric:tabular-nums}
+.check{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;padding:6px 0;border-top:1px solid var(--line)}
+.check:first-of-type{border-top:0}
+.check input{margin-top:4px;accent-color:var(--fg);width:18px;height:18px}
+</style>
+</head><body data-key="delgado">
+<div class="wrap">
+<header>
+  <a class="home" href="./">← Inicio</a>
+  <h3>Derecho Administrativo II · primera unidad</h3>
+  <h1>Delgado: la presunción de validez en la LBPA</h1>
+  <p>Delgado Lara (2018), <i>Ars Boni et Aequi</i>, págs. 83–114. Va con la pestaña Prerrogativas de la primera unidad.</p>
+</header>
+
+<nav role="tablist" aria-label="Temas">
+  <button role="tab" aria-selected="true" data-s="tesis">Tesis</button>
+  <button role="tab" aria-selected="false" data-s="lv">Legalidad ≠ validez</button>
+  <button role="tab" aria-selected="false" data-s="que">Qué es</button>
+  <button role="tab" aria-selected="false" data-s="ini">Inicio y fin</button>
+  <button role="tab" aria-selected="false" data-s="vinc">A quién vincula</button>
+  <button role="tab" aria-selected="false" data-s="preg">Preguntas</button>
+</nav>
+
+<section id="tesis" role="tabpanel">
+  <div class="band mostaza">
+    <h3>Las cuatro tesis del artículo</h3>
+    <ol style="margin:4px 0 0;padding-left:1.2em">
+      <li>El art. 3 LBPA dice «presunción de <b>legalidad</b>», pero lo que consagra es la presunción de <b>validez</b>. Mal léxico, mismo instituto que el español.</li>
+      <li>No es una mera suposición de legalidad: da al acto <b>fuerza vinculante</b> y una <b>tendencia a su conservación</b>.</li>
+      <li>En Chile <b>empieza con la vigencia</b> (notificación o publicación), no con la dictación; y <b>solo termina</b> con la declaración de invalidez.</li>
+      <li>Vincula a la <b>Administración</b> igual que a los particulares, y a los <b>jueces</b> de modo indirecto.</li>
+    </ol>
+    <p class="src">págs. 84 y 87–88</p>
+  </div>
+  <div class="box">
+    <h2>El punto de partida</h2>
+    <p>Validez = adecuación al ordenamiento en su conjunto (Rebollo). El Derecho chileno no examina si el acto es válido: <b>lo presume</b>. Para García de Enterría y Fernández, la presunción permite que el acto, aun con ilegalidades, despliegue sus efectos y <b>traslada al particular la carga de impugnar</b>.</p>
+    <p style="margin-top:6px">Hubo autores que la criticaron o la tacharon de inconstitucional (Aróstica; Soto Kloss: «resabio de monarquías absolutas») y otros que la defendieron incluso sin ley expresa (Madariaga, Silva). Para Delgado, la LBPA <b>zanjó</b> la discusión, y el <b>Tribunal Constitucional</b> (rol 1345-2009) la consideró concordante con la Constitución: sin ella, el Estado de Derecho sería «francamente dificultoso».</p>
+    <p class="src">págs. 85–87</p>
+  </div>
+</section>
+
+<section id="lv" role="tabpanel" hidden>
+  <div class="par">
+    <h2>Por qué legalidad y validez no son lo mismo</h2>
+    <div class="split">
+      <div class="lado"><span class="tag warn">Legalidad</span>Mera conformidad con la norma que regula el acto: competencia, procedimiento, contenido.</div>
+      <div class="lado"><span class="tag ok">Validez</span>Va más allá: también <b>normas primarias</b> o de mandato (Cano), que dicen cómo usar los poderes. Ej.: art. 1 inc. 2 CPR (bien común), proporcionalidad, precisión.</div>
+    </div>
+    <div class="imp">Consecuencia: puede haber actos <b>ilegales pero válidos</b>. Pierden la presunción de <b>legalidad</b>, pero conservan la de <b>validez</b> y siguen produciendo efectos. Ilegalidad = confrontar el acto con la norma; invalidez = la consecuencia que el ordenamiento decide.</div>
+    <p class="src">págs. 89–91</p>
+  </div>
+  <div class="par">
+    <h2>Las dos pruebas en la LBPA</h2>
+    <ul>
+      <li><b>Art. 13:</b> habla de <b>validez</b>, no de legalidad. El vicio de forma no esencial o sin perjuicio hace ilegal el acto, pero no lo invalida (Vergara, Bermúdez).</li>
+      <li><b>Art. 12:</b> intervenir pese a una causal de <b>abstención</b> es ilegal, pero no implica necesariamente la invalidez: solo responsabilidad (Millar).</li>
+    </ul>
+    <p class="src">págs. 91–93</p>
+  </div>
+  <div class="box">
+    <h2>El problema del vocabulario</h2>
+    <p>Se usan como sinónimos: «legalidad», «legitimidad» (Argentina, Ley 19.549), «juridicidad» (Moraga). La Corte Suprema mezcla los términos (SQM, rol 21.993-2014: «presunción de legalidad, validez y legitimidad»; La Reina, rol 6.237-2015). Por el <b>elemento lógico</b> de interpretación (<b>art. 22 CC</b>), el art. 3 LBPA debe leerse como presunción de <b>validez</b>.</p>
+    <p class="src">págs. 93–94</p>
+  </div>
+</section>
+
+<section id="que" role="tabpanel" hidden>
+  <div class="band rosa">
+    <h3>Definición (Rebollo)</h3>
+    <p class="def">«La cualidad de los actos administrativos en cuya virtud existe el <b>deber de actuar y decidir</b> partiendo de la premisa de que los actos administrativos son válidos en tanto no se declare su nulidad o sean anulados».</p>
+    <p class="src">pág. 95</p>
+  </div>
+  <div class="box">
+    <h2>Rasgos</h2>
+    <ul>
+      <li>Es <b>propia del acto administrativo</b>: los actos de los particulares no pueden imponerse por sí mismos; requieren al juez.</li>
+      <li>Su efecto es la <b>fuerza vinculante</b>: Administración y particulares deben acatar el acto mientras no se destruya (CGR, dictámenes 44.041/2005 y 29.826/2006).</li>
+      <li><b>Validez ≠ presunción de validez:</b> la presunción es una suposición inicial; el acto puede no ser válido.</li>
+      <li>Ninguna de las dos es <b>condición de eficacia</b>: la eficacia viene del <b>art. 51</b> (notificación o publicación). «La presunción de validez expresa la <b>fuerza</b> del acto, no su eficacia» (Rebollo).</li>
+      <li>Obliga a obedecer incluso actos con vicios de nulidad de pleno derecho. Los recursos no la suspenden por sí mismos: se requiere orden expresa de suspensión.</li>
+      <li>Genera el <b>favor acti</b> o principio de <b>conservación</b>: no se comunican los vicios a partes no viciadas, se puede convalidar. En la LBPA: art. 13 (CGR 64.860/2016) y la <b>invalidación parcial</b> del art. 53.</li>
+      <li>No es un mero privilegio: es el medio para que la Administración alcance los intereses generales sin ir al juez cada vez (veda de una especie en extinción, cuarentena sanitaria).</li>
+    </ul>
+    <p class="src">págs. 95–99</p>
+  </div>
+</section>
+
+<section id="ini" role="tabpanel" hidden>
+  <div class="par">
+    <h2>Inicio: desde la vigencia</h2>
+    <div class="split">
+      <div class="lado"><span class="tag warn">España</span>Desde que el acto se <b>dicta</b> (art. 39 Ley 39/2015). Para eliminarlo, aunque no esté notificado, hay que ir a la revisión.</div>
+      <div class="lado"><span class="tag ok">Chile</span>Desde la <b>entrada en vigencia</b>, es decir, con la notificación o publicación (art. 3 LBPA).</div>
+    </div>
+    <div class="imp"><b>Consecuencia:</b> el acto dictado pero no comunicado no tiene presunción de validez. La Administración puede eliminarlo con un <b>simple retiro</b>, sin el procedimiento de invalidación del art. 53 (CGR 50.318/2015; CGR 41.269/2017, adjudicación de una concesión retirada de toma de razón).</div>
+    <p style="margin-top:8px"><b>Crítica de Delgado:</b> es un <b>riesgo para la seguridad jurídica</b>. Ej.: el mejor postor de una licitación ve eliminado el acto de adjudicación antes de que se le notifique, sin audiencia ni defensa.</p>
+    <p style="margin-top:6px"><b>Discrepa de Bocksang</b>, para quien el acto no se dicta sino que «se constituye» cuando el procedimiento se consolida. Para Delgado, el acto <b>existe desde que se dicta</b> (arts. 18 y 40); lo que llega después, por ley, es la presunción y la eficacia (arts. 3 y 51).</p>
+    <p class="src">págs. 99–102</p>
+  </div>
+  <div class="par">
+    <h2>Fin: solo la declaración de invalidez</h2>
+    <p>Es <b>iuris tantum</b> (presunción meramente legal, art. 47 CC). Solo la destruye la <b>declaración de invalidez</b>, de la Administración (potestad invalidatoria) o del juez.</p>
+    <div class="imp">No confundir <b>eliminar el acto</b> con <b>destruir la presunción</b>. Si el acto se extingue naturalmente (cumplió su objeto) o se <b>revoca</b> por mérito, solo deja de producir nuevos efectos: <b>se sigue presumiendo válido</b> respecto de lo que produjo. La Corte Suprema exige acreditar ilicitud, desviación de poder o arbitrariedad (rol 52.944-2016). Bermúdez: los actos son legales (válidos) mientras no se diga lo contrario.</div>
+    <p class="src">págs. 102–103</p>
+  </div>
+</section>
+
+<section id="vinc" role="tabpanel" hidden>
+  <div class="split">
+    <div class="band salvia"><h3>Administración</h3><p>La vincula <b>con la misma fuerza</b> que a los particulares: debe obedecer el acto y preferir <b>conservarlo</b> (subsanar antes que eliminar). Regla general con excepciones: puede invalidar si hay vicios graves, incluso si el acto pasó la <b>toma de razón</b> (CGR 85.076/2016; 29.826/2006). Pero <b>no puede retirarlo sin más</b>: debe seguir el procedimiento de invalidación con audiencia (CS, <b>Grupo CAVALA</b>, rol 22.230-2016) y, mientras tanto, <b>suspender</b> sus efectos (arts. 3 y 53).</p></div>
+    <div class="band cielo"><h3>Jueces</h3><p>No son destinatarios del acto: son quienes deciden si la presunción subsiste. Pero los vincula <b>indirectamente</b>: deben partir de que el acto es válido al decidir (1) si <b>suspenden</b> sus efectos y (2) si lo <b>eliminan</b>, centrando el juicio en constatar un vicio grave. La CS anuló un fallo que la desconoció (rol 1.126-2015).</p></div>
+  </div>
+  <div class="ojo"><b class="t">Ojo con el plazo</b>El artículo (2018) transcribe el art. 53 con plazo de <b>dos años</b>. La ley vigente dice <b>un año</b>.</div>
+  <p class="src">págs. 104–109</p>
+</section>
+
+<section id="preg" role="tabpanel" hidden>
+  <div class="band cielo"><p>Preguntas <b>nuevas</b> sobre el artículo, al estilo del profesor.</p></div>
+  <div class="qbar">
+    <select id="qfiltro" aria-label="Filtrar"><option value="todo">Todas</option><option value="sm">Solo alternativas</option><option value="vf">Solo V/F</option></select>
+    <button data-q="mezclar">Mezclar</button>
+    <span class="score"></span>
+  </div>
+  <div id="quizbox" style="display:flex;flex-direction:column;gap:10px"></div>
+  <div class="qfoot"><button class="pri" data-q="corregir">Corregir</button><button data-q="reiniciar">Borrar respuestas</button><span class="score"></span></div>
+</section>
+
+<footer>Fuente: Delgado Lara, Álvaro (2018): «Algunos comentarios sobre la presunción de validez de los actos administrativos en la Ley de Bases de los Procedimientos Administrativos», <i>Ars Boni et Aequi</i>, año 14, n.° 1, págs. 83–114. Leído completo.</footer>
+</div>
+<script>
+window.PREG=[
+{t:'sm',q:'Según el texto de Delgado, ¿qué institución consagra realmente el artículo 3° de la Ley N° 19.880, aun cuando utiliza la expresión «presunción de legalidad»?',
+ o:['La presunción de eficacia.','La presunción de validez.','La presunción de juridicidad absoluta.','La presunción de derecho.'],a:1,
+ e:'El legislador usó un léxico inconveniente, pero, interpretado en armonía con el resto de la LBPA (art. 22 CC, elemento lógico), consagró la presunción de validez, la misma institución del Derecho español.',s:'Delgado, págs. 89 y 94'},
+{t:'sm',q:'Según el texto, ¿por qué la presunción de legalidad y la presunción de validez no son equivalentes?',
+ o:['Porque la legalidad es la mera conformidad con la norma que regula el acto, mientras que la validez además exige ajustarse a normas primarias, intereses y valores del ordenamiento.','Porque la validez solo se refiere a la forma del acto.','Porque la legalidad la declara el juez y la validez la Contraloría.','Porque la presunción de legalidad es de derecho y la de validez es simplemente legal.'],a:0,
+ e:'Lo que se presume es distinto. Un acto puede respetar las reglas de su confección y ser inválido por contrariar, por ejemplo, el bien común (art. 1 inc. 2 CPR) o la proporcionalidad.',s:'Delgado, págs. 89–90'},
+{t:'sm',q:'Según el texto, ¿qué ocurre con un acto que adolece de un vicio de forma no esencial que no genera perjuicio al interesado?',
+ o:['Pierde la presunción de validez y deja de producir efectos.','Pierde la presunción de legalidad, pero conserva la de validez y debe seguir acatándose.','Se transforma en un acto inexistente.','Debe ser revocado por mérito.'],a:1,
+ e:'Es el ejemplo del art. 13 LBPA: el acto es ilegal, pero esa ilegalidad no es invalidante, así que se sigue presumiendo válido.',s:'Delgado, págs. 91–92'},
+{t:'sm',q:'Según Delgado, ¿qué norma de la Ley N° 19.880, además del art. 13, demuestra que presunción de legalidad y de validez son distintas?',
+ o:['El art. 12, porque la actuación de un funcionario con motivo de abstención no implica necesariamente la invalidez del acto.','El art. 45, sobre notificación.','El art. 59, sobre recursos.','El art. 65, sobre silencio negativo.'],a:0,
+ e:'No abstenerse es una ilegalidad, pero por regla general solo genera responsabilidad disciplinaria (Millar).',s:'Delgado, págs. 92–93'},
+{t:'sm',q:'Según el texto, ¿cuál es el efecto propio de la presunción de validez?',
+ o:['Hacer inimpugnable el acto administrativo.','Revestir al acto de fuerza vinculante: un deber de acatamiento para la Administración y los particulares mientras no sea destruido.','Determinar el momento en que el acto produce efectos.','Eximir al acto de la toma de razón.'],a:1,
+ e:'La presunción expresa la fuerza del acto, no su eficacia (Rebollo). Así lo ha dicho también la Contraloría (dictámenes 44.041/2005 y 29.826/2006).',s:'Delgado, págs. 95–96'},
+{t:'sm',q:'Según el texto, ¿de qué depende la eficacia del acto administrativo en el Derecho chileno?',
+ o:['De que el acto sea válido.','De que el acto se presuma válido.','De otra previsión del ordenamiento: el art. 51 LBPA, que hace producir efectos desde la notificación o publicación.','De la toma de razón.'],a:2,
+ e:'Ni la validez ni su presunción son condiciones de eficacia. Por eso un acto inválido pero comunicado produce efectos.',s:'Delgado, págs. 96–97'},
+{t:'sm',q:'Según el texto, ¿desde cuándo rige la presunción de validez en Chile y en qué se diferencia del Derecho español?',
+ o:['En ambos, desde la toma de razón.','En Chile, desde la dictación; en España, desde la publicación.','En Chile, desde la entrada en vigencia (notificación o publicación); en España, desde que el acto se dicta.','En ambos, desde que el acto queda firme.'],a:2,
+ e:'Art. 3 LBPA frente al art. 39 de la Ley española 39/2015. El legislador chileno se apartó de su modelo en este punto.',s:'Delgado, págs. 99–100'},
+{t:'sm',q:'En relación a la siguiente narración, determine qué puede hacer la Administración según el criterio de la Contraloría expuesto por Delgado: <i>«El servicio dicta el acto de adjudicación de una concesión, pero antes de notificarlo advierte que tiene un vicio»</i>.',
+ o:['Debe iniciar el procedimiento de invalidación del art. 53, con audiencia del adjudicatario.','Puede eliminarlo con un simple retiro, porque el acto aún no está vigente ni goza de presunción de validez.','Debe pedir al juez que lo anule.','Debe esperar a que el adjudicatario lo impugne.'],a:1,
+ e:'Es el criterio de la CGR (dictámenes 50.318/2015 y 41.269/2017). Delgado advierte que crea un riesgo para la seguridad jurídica, porque el interesado no puede defenderse.',s:'Delgado, págs. 100–102'},
+{t:'sm',q:'Según el texto, ¿cuál es la única forma de destruir la presunción de validez?',
+ o:['La revocación del acto por razones de mérito.','La extinción natural del acto por cumplimiento de su objeto.','La declaración de invalidez, por la Administración o por el juez.','La interposición de un recurso administrativo.'],a:2,
+ e:'No hay que confundir la eliminación del acto, que admite muchas formas, con la destrucción de la presunción, que solo ocurre con la invalidación o anulación.',s:'Delgado, págs. 102–103'},
+{t:'sm',q:'En relación a la siguiente narración, valore la actuación según el texto: <i>«La municipalidad estima ilegal el decreto que autorizó a una empresa a instalar un letrero LED en un bien nacional de uso público y lo deja sin efecto tras citar al representante a una reunión informativa»</i>.',
+ o:['Es correcta, porque la Administración puede retirar sin más los actos que estima ilegales.','Es incorrecta: debió iniciar un procedimiento de invalidación en que el interesado pudiera ser oído y formular descargos.','Es correcta, porque la presunción de validez no vincula a la Administración.','Es incorrecta, porque solo el juez puede invalidar actos.'],a:1,
+ e:'Es el caso Grupo CAVALA con Municipalidad de Independencia (CS, rol 22.230-2016). La presunción vincula a la Administración: si el acto está vigente, no puede desconocerlo sin invalidarlo.',s:'Delgado, págs. 105–106'},
+{t:'sm',q:'Según el texto, ¿de qué modo vincula la presunción de validez a los tribunales de justicia?',
+ o:['No los vincula en absoluto, porque no son destinatarios del acto.','Los vincula del mismo modo que a los particulares: deben cumplir el acto.','Los vincula indirectamente: deben partir de que el acto es válido al decidir sobre su suspensión y sobre su eliminación, centrando el juicio en constatar un vicio grave.','Los obliga a confirmar siempre el acto impugnado.'],a:2,
+ e:'La CS acogió un recurso contra una sentencia que desconoció la presunción de validez (Sociedad de Proyectos y Servicios Ingeniería con GORE de Tarapacá, rol 1.126-2015).',s:'Delgado, págs. 106–107'},
+{t:'sm',q:'Según el texto, ¿qué ha resuelto la Contraloría sobre la invalidación de actos que ya pasaron el trámite de toma de razón?',
+ o:['Que no pueden invalidarse, porque la toma de razón los hace inmutables.','Que pueden invalidarse si nuevos antecedentes revelan vicios de legalidad, porque el control previo refuerza pero no hace inmutable la presunción.','Que solo puede invalidarlos el Presidente.','Que requieren decreto de insistencia.'],a:1,
+ e:'Dictamen 29.826 de 2006. Delgado precisa que la toma de razón refuerza la presunción, pero es la ley la que la otorga.',s:'Delgado, págs. 105'},
+{t:'vf',q:'Según el texto, el Tribunal Constitucional ha estimado que la presunción de legalidad de los actos administrativos es concordante con fines constitucionales.',a:true,
+ e:'Verdadero. Rol 1345-2009, sobre el art. 171 del Código Sanitario: sin esa presunción, la vigencia del Estado de Derecho sería «francamente dificultosa».',s:'Delgado, págs. 86–87'},
+{t:'vf',q:'Según el texto, es posible encontrar actos administrativos ilegales pero válidos.',a:true,
+ e:'Verdadero. Si la ilegalidad no es invalidante, el acto pierde la presunción de legalidad pero conserva la de validez.',s:'Delgado, pág. 91'},
+{t:'vf',q:'Según el texto, la validez y la presunción de validez son condiciones de la eficacia del acto administrativo.',a:false,
+ e:'Falso. La eficacia proviene del art. 51 LBPA (notificación o publicación). Un acto inválido pero publicitado produce efectos.',s:'Delgado, págs. 96–97'},
+{t:'vf',q:'Según el texto, la interposición de un recurso administrativo suspende por sí misma la presunción de validez del acto impugnado.',a:false,
+ e:'Falso. Se requiere un pronunciamiento expreso de la Administración o del juez que ordene la suspensión.',s:'Delgado, págs. 97–98'},
+{t:'vf',q:'Según el texto, cuando un acto es revocado por razones de mérito, se destruye su presunción de validez.',a:false,
+ e:'Falso. La revocación solo hace que el acto deje de producir nuevos efectos; respecto de lo que produjo, se sigue presumiendo válido.',s:'Delgado, págs. 102–103'},
+{t:'vf',q:'Para Delgado, el acto administrativo existe desde que se dicta, aunque la presunción de validez y la eficacia surjan después.',a:true,
+ e:'Verdadero. Así lo desprende de los arts. 18 y 40 LBPA, en contra de Bocksang, para quien el acto «se constituye» al consolidarse el procedimiento.',s:'Delgado, pág. 101'},
+{t:'vf',q:'Según el texto, la presunción de validez es una presunción de derecho, que no admite prueba en contrario.',a:false,
+ e:'Falso. Es iuris tantum, o meramente legal (art. 47 CC): puede destruirse con la declaración de invalidez.',s:'Delgado, pág. 102'},
+{t:'vf',q:'Según el texto, el principio de conservación del acto administrativo se refleja en la Ley N° 19.880 en su art. 13 y en la posibilidad de invalidación parcial del art. 53.',a:true,
+ e:'Verdadero. Es el favor acti de García de Enterría y Fernández, derivado de la presunción de validez (CGR, dictamen 64.860/2016).',s:'Delgado, pág. 98'}
+];
+
+</script>
+
+<script>
+/* Pestañas + motor de preguntas (alternativas y V/F). Datos en window.PREG = [{t:'sm'|'vf', q, o:[...], a:indice|true|false, e, s, k}] */
+(function(){
+  var KEY=document.body.dataset.key||'admin';
+  function sget(k){try{return JSON.parse(localStorage.getItem(KEY+'-'+k))}catch(e){return null}}
+  function sset(k,v){try{localStorage.setItem(KEY+'-'+k,JSON.stringify(v))}catch(e){}}
+
+  // Pestañas
+  var tabs=[].slice.call(document.querySelectorAll('nav [role=tab]'));
+  function show(id){
+    tabs.forEach(function(t){var on=t.dataset.s===id;t.setAttribute('aria-selected',on);var p=document.getElementById(t.dataset.s);if(p)p.hidden=!on;});
+    sset('tab',id);
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.s);window.scrollTo({top:0});});});
+  var s=sget('tab'); if(s&&document.getElementById(s)&&tabs.length)show(s);
+
+  // Preguntas
+  var box=document.getElementById('quizbox'); if(!box||!window.PREG)return;
+  var L='abcdefgh';
+  // Baraja las alternativas con semilla fija por pregunta, para que la correcta no caiga siempre en la misma letra
+  function rng(seed){return function(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;};}
+  var data=window.PREG.map(function(x,i){
+    x.id=i;
+    if(x.t==='sm'&&!x.fijo){
+      var r=rng(i*7919+(document.body.dataset.key||'').length*31+17), idx=x.o.map(function(_,j){return j;});
+      for(var k=idx.length-1;k>0;k--){var j=Math.floor(r()*(k+1));var t=idx[k];idx[k]=idx[j];idx[j]=t;}
+      x.o=idx.map(function(j){return x.o[j];}); x.a=idx.indexOf(x.a);
+    }
+    return x;
+  });
+  var resp=sget('resp')||{}; var corregido=false;
+  var filtro=document.getElementById('qfiltro');
+  function lista(){
+    var f=filtro?filtro.value:'todo';
+    var orden=sget('orden');
+    var arr=data.filter(function(x){return f==='todo'||x.t===f||(x.k&&x.k===f);});
+    if(orden){var pos={};orden.forEach(function(id,i){pos[id]=i});arr.sort(function(a,b){return (pos[a.id]??a.id)-(pos[b.id]??b.id)});}
+    return arr;
+  }
+  function esc(t){return t}
+  function render(){
+    var arr=lista(); box.innerHTML='';
+    arr.forEach(function(x,n){
+      var d=document.createElement('div'); d.className='q'+(corregido?' done':'');
+      var head='<div class="qn"><span>'+(n+1)+' · '+(x.t==='vf'?'Verdadero o falso':'Selección múltiple')+'</span>'+(x.k?'<span>· '+x.k+'</span>':'')+'</div>';
+      var body='<p class="qt">'+esc(x.q)+'</p>';
+      var nm='q'+x.id;
+      if(x.t==='vf'){
+        body+='<div class="vf">'+[['V',true],['F',false]].map(function(p){
+          var ch=resp[x.id]===p[1]?' checked':'';
+          var cls=corregido?(p[1]===x.a?' class="ok"':(resp[x.id]===p[1]?' class="bad"':'')):'';
+          return '<label'+cls+'><input type="radio" name="'+nm+'" value="'+p[1]+'"'+ch+(corregido?' disabled':'')+'><span><b>'+p[0]+'</b></span></label>';
+        }).join('')+'</div>';
+      }else{
+        body+=x.o.map(function(o,j){
+          var ch=resp[x.id]===j?' checked':'';
+          var cls=corregido?(j===x.a?' class="ok"':(resp[x.id]===j?' class="bad"':'')):'';
+          return '<label'+cls+'><input type="radio" name="'+nm+'" value="'+j+'"'+ch+(corregido?' disabled':'')+'><span>'+L[j]+') '+o+'</span></label>';
+        }).join('');
+      }
+      var ok=resp[x.id]===x.a;
+      var correcta=x.t==='vf'?(x.a?'Verdadero':'Falso'):(L[x.a]+')');
+      body+='<div class="exp"><span class="res '+(ok?'ok':'bad')+'">'+(resp[x.id]===undefined?'Sin responder':(ok?'Correcta':'Incorrecta'))+' · respuesta: '+correcta+'</span><p>'+x.e+'</p>'+(x.s?'<p class="src">'+x.s+'</p>':'')+'</div>';
+      d.innerHTML=head+body; box.appendChild(d);
+      [].forEach.call(d.querySelectorAll('input'),function(inp){inp.addEventListener('change',function(){
+        resp[x.id]=x.t==='vf'?(inp.value==='true'):parseInt(inp.value,10); sset('resp',resp); cuenta();
+      });});
+    });
+    cuenta();
+  }
+  function cuenta(){
+    var arr=lista(), r=0, b=0;
+    arr.forEach(function(x){if(resp[x.id]!==undefined){r++; if(resp[x.id]===x.a)b++;}});
+    [].forEach.call(document.querySelectorAll('.score'),function(el){
+      el.textContent=corregido?('Puntaje: '+b+' de '+arr.length+(arr.length?' ('+Math.round(100*b/arr.length)+' %)':'')):('Respondidas: '+r+' de '+arr.length);
+    });
+  }
+  function corregir(){corregido=true;render();window.scrollTo({top:box.offsetTop-80});}
+  function reiniciar(){resp={};sset('resp',resp);corregido=false;render();window.scrollTo({top:0});}
+  function mezclar(){var ids=data.map(function(x){return x.id});for(var i=ids.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=ids[i];ids[i]=ids[j];ids[j]=t;}sset('orden',ids);resp={};sset('resp',resp);corregido=false;render();}
+  [].forEach.call(document.querySelectorAll('[data-q=corregir]'),function(b){b.addEventListener('click',corregir)});
+  [].forEach.call(document.querySelectorAll('[data-q=reiniciar]'),function(b){b.addEventListener('click',reiniciar)});
+  [].forEach.call(document.querySelectorAll('[data-q=mezclar]'),function(b){b.addEventListener('click',mezclar)});
+  if(filtro)filtro.addEventListener('change',function(){corregido=false;render();});
+  render();
+})();
+
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}</script>
+</body></html>
